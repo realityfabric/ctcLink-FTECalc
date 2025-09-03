@@ -1,0 +1,9 @@
+UpdateLibraries.bat
+UpdateLibraries.bash
+~*
+*.xls
+*.xlsx
+Old Versions/*
+*.xlsm
+*.frx
+Code/Macros.bas
