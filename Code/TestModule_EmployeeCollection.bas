@@ -805,6 +805,7 @@ Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_Count()
     'Arrange:
     Dim EC As EmployeeCollection
     Dim EC_Merged As EmployeeCollection
+    '@Ignore UseMeaningfulName
     Dim E(1 To 10) As Employee
     Dim Index As Long
     
@@ -844,6 +845,7 @@ Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_EmplID()
     'Arrange:
     Dim EC As EmployeeCollection
     Dim EC_Merged As EmployeeCollection
+    '@Ignore UseMeaningfulName
     Dim E(1 To 10) As Employee
     Dim Index As Long
     
@@ -884,6 +886,7 @@ Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_Name()
     'Arrange:
     Dim EC As EmployeeCollection
     Dim EC_Merged As EmployeeCollection
+    '@Ignore UseMeaningfulName
     Dim E(1 To 10) As Employee
     Dim Index As Long
     
@@ -924,6 +927,7 @@ Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_DeptID()
     'Arrange:
     Dim EC As EmployeeCollection
     Dim EC_Merged As EmployeeCollection
+    '@Ignore UseMeaningfulName
     Dim E(1 To 10) As Employee
     Dim Index As Long
     
@@ -964,6 +968,7 @@ Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_JobCode()
     'Arrange:
     Dim EC As EmployeeCollection
     Dim EC_Merged As EmployeeCollection
+    '@Ignore UseMeaningfulName
     Dim E(1 To 10) As Employee
     Dim Index As Long
     
@@ -1001,8 +1006,10 @@ Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_HoursWorked()
     On Error GoTo TestFail
     
     'Arrange:
+    '@Ignore UseMeaningfulName
     Dim EC As EmployeeCollection
     Dim EC_Merged As EmployeeCollection
+    '@Ignore UseMeaningfulName
     Dim E(1 To 10) As Employee
     Dim Index As Long
     
@@ -1045,6 +1052,7 @@ Private Sub Test_MergeAllEmployees_ToArrayContainer_10Employees_1UniqueEmployee_
     Dim EC As EmployeeCollection
     Dim EC_Merged As EmployeeCollection
     Dim AC_Merged As ArrayContainer
+    '@Ignore UseMeaningfulName
     Dim E(1 To 10) As Employee
     Dim Index As Long
     
@@ -1086,6 +1094,7 @@ Private Sub Test_MergeAllEmployees_ToArrayContainer_10Employees_1UniqueEmployee_
     Dim EC As EmployeeCollection
     Dim EC_Merged As EmployeeCollection
     Dim AC_Merged As ArrayContainer
+    '@Ignore UseMeaningfulName
     Dim E(1 To 10) As Employee
     Dim Index As Long
     
@@ -1127,6 +1136,7 @@ Private Sub Test_MergeAllEmployeesOnDeptID_ToArrayContainer_10Employees_1UniqueE
     Dim EC As EmployeeCollection
     Dim EC_Merged As EmployeeCollection
     Dim AC_Merged As ArrayContainer
+    '@Ignore UseMeaningfulName
     Dim E(1 To 10) As Employee
     Dim Index As Long
     
@@ -1169,6 +1179,7 @@ Private Sub Test_MergeAllEmployeesOnDeptID_ToArrayContainer_10Employees_2UniqueE
     Dim EC As EmployeeCollection
     Dim EC_Merged As EmployeeCollection
     Dim AC_Merged As ArrayContainer
+    '@Ignore UseMeaningfulName
     Dim E(1 To 10) As Employee
     Dim Index As Long
     
@@ -1212,5 +1223,4 @@ TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
     Resume TestExit
 End Sub
-
 
