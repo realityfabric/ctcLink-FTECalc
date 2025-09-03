@@ -798,6 +798,52 @@ TestFail:
     Resume TestExit
 End Sub
 
+'@TestMethod("Uncategorized")
+Private Sub Test_CreateFromWorksheet_Appointed_WithIndependentStudy()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC As EmployeeCollection
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Dim FilePath As String
+    Dim FileName As String
+    FilePath = ThisWorkbook.Path & "/TestData/"
+    FileName = "Test Workbook - Appointed and Hourly - With Independent Study.xlsx"
+    
+    Workbooks.Open FileName:=FilePath & FileName, ReadOnly:=True
+    
+    Set wb = Workbooks.Item(FileName)
+    
+    Set ws = WBTools.GetSheetLike("*Appointed*", wb)
+    Set EC = New EmployeeCollection
+    
+    'Act:
+    Set EC = EC.CreateEmployeeCollectionFromWorksheet(ws, False)
+    
+    'Assert:
+    Dim Index As Long
+    Dim PayPeriodString As String
+    
+    Assert.IsTrue EC.Item(1).HoursWorked = 11
+    Assert.IsTrue EC.Item(2).HoursWorked = 22
+    ' Skip the 3rd row (independent study)
+    Assert.IsTrue EC.Item(3).HoursWorked = 44
+    Assert.IsTrue EC.Item(4).HoursWorked = 55
+    Assert.IsTrue EC.Count = 23
+    
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    wb.Close
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
 '@TestMethod("Merge")
 Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_Count()
     On Error GoTo TestFail
