@@ -481,9 +481,17 @@ Private Function CreateEmployeeCollectionFromWorksheet_Appointed( _
     For Row = HeaderRow + 1 To LastRow
         Set Emp = New Employee
         
+        ' Not empty, not canceled, and a number value (ignore Independent Study)
         If WBTools.getCellValueAt(ws, EmplIDCol, Row) <> Empty _
                 And WBTools.getCellValueAt(ws, CanceledClassCol, Row) = Empty _
-                Then
+                And ( _
+                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 2 Or _
+                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 3 Or _
+                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 4 Or _
+                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 5 Or _
+                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 14 Or _
+                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 20 _
+                ) Then
             Emp.EmplID = WBTools.getCellValueAt(ws, EmplIDCol, Row)
             Emp.Name = WBTools.getCellValueAt(ws, NameCol, Row)
             Emp.DeptID = WBTools.getCellValueAt(ws, DeptCol, Row)
