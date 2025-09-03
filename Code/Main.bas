@@ -1,15 +1,20 @@
 Attribute VB_Name = "Main"
-'@IgnoreModule UseMeaningfulName
 '@Folder(FTECalc)
 Option Explicit
 
+'@VariableDescription("Stores the Unix Timestamp at runtime, set in the Main method.")
 Private UnixTimestamp As LongLong
+Attribute UnixTimestamp.VB_VarDescription = "Stores the Unix Timestamp at runtime, set in the Main method."
 
+'@Description("Returns the Unix Timestamp recorded at runtime in the Main method.")
 Public Function GetTimestamp() As LongLong
+Attribute GetTimestamp.VB_Description = "Returns the Unix Timestamp recorded at runtime in the Main method."
     GetTimestamp = UnixTimestamp
 End Function
 
+'@Description("Returns the Unix Timestamp recorded at runtime in the Main method as a string.")
 Public Function GetTimestampStr() As String
+Attribute GetTimestampStr.VB_Description = "Returns the Unix Timestamp recorded at runtime in the Main method as a string."
     GetTimestampStr = Trim$(Str$(GetTimestamp()))
 End Function
 
@@ -158,5 +163,3 @@ End Sub
 Public Function UnixTime() As LongLong
     UnixTime = DateDiff("s", "1/1/1970 00:00:00", Now)
 End Function
-
-
