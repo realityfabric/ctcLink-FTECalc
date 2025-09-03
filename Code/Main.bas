@@ -60,9 +60,10 @@ Public Sub Main()
             MultiSelect:=True, _
             FileFilter:="Excel Documents, *.xls;*.xlsx;*.xlsm", _
             Title:="Select Workbooks for FTE Calculation")
-    
-    If InputFileNames = False Then Exit Sub
-    
+
+    ' If InputFileNames is not an array of Variants then exit
+    If VarType(InputFileNames) <> 8204 Then Exit Sub
+
     For Each Elem In InputFileNames
         Set wb = Workbooks.Open(Elem, ReadOnly:=True)
         
