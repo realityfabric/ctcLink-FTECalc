@@ -822,9 +822,6 @@ Private Sub Test_CreateFromWorksheet_Appointed_WithIndependentStudy()
     Set EC = EC.CreateEmployeeCollectionFromWorksheet(ws, False)
     
     'Assert:
-    Dim Index As Long
-    Dim PayPeriodString As String
-    
     Assert.IsTrue EC.Item(1).HoursWorked = 11
     Assert.IsTrue EC.Item(2).HoursWorked = 22
     ' Skip the 3rd row (independent study)
