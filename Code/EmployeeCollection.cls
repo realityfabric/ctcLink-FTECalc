@@ -286,14 +286,19 @@ Public Function MergeAllEmployees() As EmployeeCollection
     For Each EmplIDKey In EmplIDs.Keys
         For Each DeptIDKey In DeptIDs.Keys
             For Each JobCodeKey In JobCodes.Keys
+                Debug.Print "E: " & EmplIDKey & "; D: " & DeptIDKey & "; J: " & JobCodeKey
                 Set FilteredCollection = Filter( _
                         EmplIDFilter:=EmplIDKey, _
                         DeptIDFilter:=DeptIDKey, _
                         JobCodeFilter:=JobCodeKey)
-                If FilteredCollection.Count > 0 Then Set MergedEmployee = FilteredCollection.Item(1)
-                For Index = 2 To FilteredCollection.Count
-                    Set MergedEmployee = MergedEmployee.Merge(FilteredCollection.Item(Index))
-                Next Index
+                If FilteredCollection.Count > 0 Then
+                    Set MergedEmployee = FilteredCollection.Item(1)
+                End If
+                If FilteredCollection.Count > 1 Then
+                    For Index = 2 To FilteredCollection.Count
+                        Set MergedEmployee = MergedEmployee.Merge(FilteredCollection.Item(Index))
+                    Next Index
+                End If
                 If FilteredCollection.Count > 0 Then MergedCollection.Add MergedEmployee
             Next JobCodeKey
         Next DeptIDKey
@@ -321,11 +326,13 @@ Public Function MergeAllEmployeesOnDeptID() As EmployeeCollection
         For Each DeptIDKey In DeptIDs.Keys
             Set FilteredCollection = Filter(EmplIDFilter:=EmplIDKey, DeptIDFilter:=DeptIDKey)
             If FilteredCollection.Count > 0 Then Set MergedEmployee = FilteredCollection.Item(1)
-            For Index = 2 To FilteredCollection.Count
-                Set MergedEmployee = MergedEmployee.Merge( _
-                    FilteredCollection.Item(Index), _
-                    PreserveJobCode:=False)
-            Next Index
+            If FilteredCollection.Count > 1 Then
+                For Index = 2 To FilteredCollection.Count
+                    Set MergedEmployee = MergedEmployee.Merge( _
+                        FilteredCollection.Item(Index), _
+                        PreserveJobCode:=False)
+                Next Index
+            End If
             If FilteredCollection.Count > 0 Then MergedCollection.Add MergedEmployee
         Next DeptIDKey
     Next EmplIDKey
