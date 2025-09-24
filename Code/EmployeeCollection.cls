@@ -13,6 +13,7 @@ Option Explicit
 Private Type TEmployeeCollection
     Employees As Collection
 End Type
+
 Private this As TEmployeeCollection
 
 Private Sub Class_Initialize()
@@ -21,9 +22,9 @@ End Sub
 
 '@Ignore ParameterNotUsed
 Public Sub Add(ByVal Item As Employee _
-        , Optional ByVal Key As String = vbNullString _
-        , Optional ByVal Before As Variant = Nothing _
-        , Optional ByVal After As Variant = Nothing)
+               , Optional ByVal Key As String = vbNullString _
+                , Optional ByVal Before As Variant = Nothing _
+                 , Optional ByVal After As Variant = Nothing)
     ' TODO: Implement Key, Before, After
     this.Employees.Add Item
 End Sub
@@ -49,17 +50,17 @@ Public Sub Concat(ByVal EmployeeCollection2 As EmployeeCollection)
 End Sub
 
 Public Function Filter(Optional ByVal EmplIDFilter As String = vbNullString _
-        , Optional ByVal DeptIDFilter As String = vbNullString _
-        , Optional ByVal JobCodeFilter As String = vbNullString _
-        ) As EmployeeCollection
+                       , Optional ByVal DeptIDFilter As String = vbNullString _
+                        , Optional ByVal JobCodeFilter As String = vbNullString _
+                         ) As EmployeeCollection
     Dim FilteredCollection As EmployeeCollection
     Dim Index As Long
     Set FilteredCollection = New EmployeeCollection
 
     For Index = 1 To Count
         If (EmplIDFilter = vbNullString Or EmplIDFilter = Item(Index).EmplID) _
-                And (DeptIDFilter = vbNullString Or DeptIDFilter = Item(Index).DeptID) _
-                And (JobCodeFilter = vbNullString Or JobCodeFilter = Item(Index).JobCode) Then
+           And (DeptIDFilter = vbNullString Or DeptIDFilter = Item(Index).DeptID) _
+           And (JobCodeFilter = vbNullString Or JobCodeFilter = Item(Index).JobCode) Then
             FilteredCollection.Add Item(Index)
         End If
     Next Index
@@ -71,9 +72,9 @@ End Function
 ' IncludeDeptID: Include DeptID field if True
 ' IncludeJobCode: Include JobCode field if True
 Public Function ToArrayContainer(Optional ByVal Headers As Boolean = True _
-        , Optional ByVal IncludeDeptID As Boolean = True _
-        , Optional ByVal IncludeJobCode As Boolean = True _
-        ) As ArrayContainer
+                                 , Optional ByVal IncludeDeptID As Boolean = True _
+                                  , Optional ByVal IncludeJobCode As Boolean = True _
+                                   ) As ArrayContainer
         
     ' Data Columns:
     ' EmplID
@@ -85,8 +86,8 @@ Public Function ToArrayContainer(Optional ByVal Headers As Boolean = True _
         
     Dim DataContainer As ArrayContainer
     Dim DataArray() As Variant
-    Dim RowCount As Long ' (r,)
-    Dim ColumnCount As Long ' (,c)
+    Dim RowCount As Long                         ' (r,)
+    Dim ColumnCount As Long                      ' (,c)
     Dim CollectionIndex As Long
     Dim RowIndex As Long
     Dim ColumnIndex As Long
@@ -97,7 +98,7 @@ Public Function ToArrayContainer(Optional ByVal Headers As Boolean = True _
     RowCount = Count()
     If Headers Then RowCount = RowCount + 1
     
-    ColumnCount = 4 ' EmplID, Name, Hours, FTE
+    ColumnCount = 4                              ' EmplID, Name, Hours, FTE
     If IncludeDeptID Then ColumnCount = ColumnCount + 1
     If IncludeJobCode Then ColumnCount = ColumnCount + 1
     
@@ -255,9 +256,9 @@ Public Function MergeAllEmployeesOnEmplID() As EmployeeCollection
         Set MergedEmployee = FilteredCollection.Item(1)
         For Index = 2 To FilteredCollection.Count
             Set MergedEmployee = MergedEmployee.Merge( _
-                FilteredCollection.Item(Index), _
-                PreserveDeptID:=False, _
-                PreserveJobCode:=False)
+                                 FilteredCollection.Item(Index), _
+                                 PreserveDeptID:=False, _
+                                 PreserveJobCode:=False)
         Next Index
         MergedCollection.Add MergedEmployee
     Next Key
@@ -288,9 +289,9 @@ Public Function MergeAllEmployees() As EmployeeCollection
             For Each JobCodeKey In JobCodes.Keys
                 Debug.Print "E: " & EmplIDKey & "; D: " & DeptIDKey & "; J: " & JobCodeKey
                 Set FilteredCollection = Filter( _
-                        EmplIDFilter:=EmplIDKey, _
-                        DeptIDFilter:=DeptIDKey, _
-                        JobCodeFilter:=JobCodeKey)
+                                         EmplIDFilter:=EmplIDKey, _
+                                         DeptIDFilter:=DeptIDKey, _
+                                         JobCodeFilter:=JobCodeKey)
                 If FilteredCollection.Count > 0 Then
                     Set MergedEmployee = FilteredCollection.Item(1)
                 End If
@@ -299,6 +300,7 @@ Public Function MergeAllEmployees() As EmployeeCollection
                         Set MergedEmployee = MergedEmployee.Merge(FilteredCollection.Item(Index))
                     Next Index
                 End If
+
                 If FilteredCollection.Count > 0 Then MergedCollection.Add MergedEmployee
             Next JobCodeKey
         Next DeptIDKey
@@ -329,10 +331,11 @@ Public Function MergeAllEmployeesOnDeptID() As EmployeeCollection
             If FilteredCollection.Count > 1 Then
                 For Index = 2 To FilteredCollection.Count
                     Set MergedEmployee = MergedEmployee.Merge( _
-                        FilteredCollection.Item(Index), _
-                        PreserveJobCode:=False)
+                                         FilteredCollection.Item(Index), _
+                                         PreserveJobCode:=False)
                 Next Index
             End If
+
             If FilteredCollection.Count > 0 Then MergedCollection.Add MergedEmployee
         Next DeptIDKey
     Next EmplIDKey
@@ -361,8 +364,8 @@ Public Function MergeAllEmployeesOnJobCode() As EmployeeCollection
             If FilteredCollection.Count > 0 Then Set MergedEmployee = FilteredCollection.Item(1)
             For Index = 2 To FilteredCollection.Count
                 Set MergedEmployee = MergedEmployee.Merge( _
-                    FilteredCollection.Item(Index), _
-                    PreserveDeptID:=False)
+                                     FilteredCollection.Item(Index), _
+                                     PreserveDeptID:=False)
             Next Index
             If FilteredCollection.Count > 0 Then MergedCollection.Add MergedEmployee
         Next JobCodeKey
@@ -372,16 +375,16 @@ Public Function MergeAllEmployeesOnJobCode() As EmployeeCollection
 End Function
 
 Public Function CreateEmployeeCollectionFromWorksheet( _
-        ByVal ws As Worksheet, _
-        ByVal IsHourly As Boolean, _
-        Optional ByVal HeaderRow As Long = 1 _
-        ) As EmployeeCollection
+       ByVal ws As Worksheet, _
+       ByVal IsHourly As Boolean, _
+       Optional ByVal HeaderRow As Long = 1 _
+       ) As EmployeeCollection
     If IsHourly Then
         Set CreateEmployeeCollectionFromWorksheet = _
-            CreateEmployeeCollectionFromWorksheet_Hourly(ws, HeaderRow)
+                                                  CreateEmployeeCollectionFromWorksheet_Hourly(ws, HeaderRow)
     Else
         Set CreateEmployeeCollectionFromWorksheet = _
-            CreateEmployeeCollectionFromWorksheet_Appointed(ws, HeaderRow)
+                                                  CreateEmployeeCollectionFromWorksheet_Appointed(ws, HeaderRow)
     End If
 End Function
 
@@ -430,7 +433,7 @@ Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
         
         ' If there is an EmplID and the class is not canceled, then...
         If WBTools.getCellValueAt(ws, EmplIDCol, Row) <> Empty _
-                And WBTools.getCellValueAt(ws, CanceledClassCol, Row) = Empty Then
+           And WBTools.getCellValueAt(ws, CanceledClassCol, Row) = Empty Then
             
             Emp.EmplID = WBTools.getCellValueAt(ws, EmplIDCol, Row)
             Emp.Name = WBTools.getCellValueAt(ws, NameCol, Row)
@@ -446,15 +449,15 @@ Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
                 
                 If PayPeriodCol(Index) > -1 Then
                     Emp.HoursWorked(PayPeriodString) = _
-                        WBTools.getCellValueAt(ws, PayPeriodCol(Index), Row)
+                                                     WBTools.getCellValueAt(ws, PayPeriodCol(Index), Row)
                 End If
             Next Index
             
             If Not Emp Is Nothing Then EC.Add Emp
         End If
-     Next Row
+    Next Row
      
-     Set CreateEmployeeCollectionFromWorksheet_Hourly = EC
+    Set CreateEmployeeCollectionFromWorksheet_Hourly = EC
 End Function
 
 Private Function CreateEmployeeCollectionFromWorksheet_Appointed( _
@@ -490,15 +493,15 @@ Private Function CreateEmployeeCollectionFromWorksheet_Appointed( _
         
         ' Not empty, not canceled, and a number value (ignore Independent Study)
         If WBTools.getCellValueAt(ws, EmplIDCol, Row) <> Empty _
-                And WBTools.getCellValueAt(ws, CanceledClassCol, Row) = Empty _
-                And ( _
-                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 2 Or _
-                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 3 Or _
-                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 4 Or _
-                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 5 Or _
-                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 14 Or _
-                    VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 20 _
-                ) Then
+           And WBTools.getCellValueAt(ws, CanceledClassCol, Row) = Empty _
+           And ( _
+           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 2 Or _
+           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 3 Or _
+           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 4 Or _
+           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 5 Or _
+           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 14 Or _
+           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 20 _
+           ) Then
             Emp.EmplID = WBTools.getCellValueAt(ws, EmplIDCol, Row)
             Emp.Name = WBTools.getCellValueAt(ws, NameCol, Row)
             Emp.DeptID = WBTools.getCellValueAt(ws, DeptCol, Row)
@@ -507,8 +510,9 @@ Private Function CreateEmployeeCollectionFromWorksheet_Appointed( _
             
             If Not Emp Is Nothing Then EC.Add Emp
         End If
-     Next Row
+    Next Row
      
-     Set CreateEmployeeCollectionFromWorksheet_Appointed = EC
+    Set CreateEmployeeCollectionFromWorksheet_Appointed = EC
 End Function
+
 

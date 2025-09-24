@@ -15,10 +15,11 @@ Private Type TArrayContainer
     Rows As Long
     Columns As Long
 End Type
+
 Private this As TArrayContainer
 
-Public Property Get Data() As Variant() '(ByVal Row As Long, ByVal Column As Long As Variant
-    Data = this.Data '(Row, Column)
+Public Property Get Data() As Variant()          '(ByVal Row As Long, ByVal Column As Long As Variant
+    Data = this.Data                             '(Row, Column)
 End Property
 
 Public Sub SetData(ByVal Rows As Long, ByVal Columns As Long, ByVal DataArray As Variant)

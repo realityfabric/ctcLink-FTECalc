@@ -15,8 +15,9 @@ Private Type TEmployee
     Name As String
     DeptID As String
     JobCode As String
-    HoursWorked As Object ' hoursWorked will be used as a Dictionary
+    HoursWorked As Object                        ' hoursWorked will be used as a Dictionary
 End Type
+
 Private this As TEmployee
 
 Private Sub Class_Initialize()
@@ -49,7 +50,7 @@ Private Sub HoursWorked_Initialize()
     this.HoursWorked.Add "11B", 0
     this.HoursWorked.Add "12A", 0
     this.HoursWorked.Add "12B", 0
-    this.HoursWorked.Add "OTH", 0 ' For non-Pay-Period-Specific cases
+    this.HoursWorked.Add "OTH", 0                ' For non-Pay-Period-Specific cases
 End Sub
 
 Public Property Get EmplID() As String
@@ -100,8 +101,8 @@ Public Property Get HoursWorked(Optional ByVal PayPeriod As String = vbNullStrin
 End Property
 
 Public Property Let HoursWorked( _
-          ByVal PayPeriod As String _
-        , ByVal Value As Long)
+       ByVal PayPeriod As String _
+       , ByVal Value As Long)
     this.HoursWorked.Item(PayPeriod) = Value
 End Property
 
@@ -112,9 +113,9 @@ End Function
 ' Returns Employee if success, Nothing if fail
 '@Ignore UseMeaningfulName
 Public Function Merge(ByVal Employee2 As Employee _
-        , Optional ByVal PreserveDeptID As Boolean = True _
-        , Optional ByVal PreserveJobCode As Boolean = True _
-        ) As Employee
+                      , Optional ByVal PreserveDeptID As Boolean = True _
+                       , Optional ByVal PreserveJobCode As Boolean = True _
+                        ) As Employee
     Dim MergedEmployee As Employee
     
     Set MergedEmployee = New Employee
@@ -149,4 +150,5 @@ Public Function Merge(ByVal Employee2 As Employee _
     
     Set Merge = MergedEmployee
 End Function
+
 

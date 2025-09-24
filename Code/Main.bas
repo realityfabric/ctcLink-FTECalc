@@ -4,17 +4,14 @@ Option Explicit
 
 '@VariableDescription("Stores the Unix Timestamp at runtime, set in the Main method.")
 Private UnixTimestamp As LongLong
-Attribute UnixTimestamp.VB_VarDescription = "Stores the Unix Timestamp at runtime, set in the Main method."
 
 '@Description("Returns the Unix Timestamp recorded at runtime in the Main method.")
 Public Function GetTimestamp() As LongLong
-Attribute GetTimestamp.VB_Description = "Returns the Unix Timestamp recorded at runtime in the Main method."
     GetTimestamp = UnixTimestamp
 End Function
 
 '@Description("Returns the Unix Timestamp recorded at runtime in the Main method as a string.")
 Public Function GetTimestampStr() As String
-Attribute GetTimestampStr.VB_Description = "Returns the Unix Timestamp recorded at runtime in the Main method as a string."
     GetTimestampStr = Trim$(Str$(GetTimestamp()))
 End Function
 
@@ -57,9 +54,9 @@ Public Sub Main()
     
     ' Get list of workbooks from user
     InputFileNames = Application.GetOpenFilename( _
-            MultiSelect:=True, _
-            FileFilter:="Excel Documents, *.xls;*.xlsx;*.xlsm", _
-            Title:="Select Workbooks for FTE Calculation")
+                     MultiSelect:=True, _
+                     FileFilter:="Excel Documents, *.xls;*.xlsx;*.xlsm", _
+                     Title:="Select Workbooks for FTE Calculation")
 
     ' If InputFileNames is not an array of Variants then exit
     If VarType(InputFileNames) <> 8204 Then Exit Sub
@@ -99,6 +96,7 @@ Public Sub Main()
         .Title = "FTECalc Output " & GetTimestampStr()
         .Subject = "FTE"
         
+        '@Ignore AssignmentNotUsed
         Set ws = .Worksheets.Item(1)
         
         .Worksheets.Add After:=ws, Count:=3
@@ -113,36 +111,36 @@ Public Sub Main()
     With Output.Worksheets.Item(1)
         .Name = "FTE Summary"
         .Range( _
-            "A1:" _
-            & WBTools.GetColumnLetterByNumber(AC_Filtered_Merged.Columns) _
-            & Trim$(Str$(AC_Filtered_Merged.Rows)) _
+        "A1:" _
+      & WBTools.GetColumnLetterByNumber(AC_Filtered_Merged.Columns) _
+      & Trim$(Str$(AC_Filtered_Merged.Rows)) _
         ) = AC_Filtered_Merged.Data
     End With
     Set AC_Filtered_Merged = Nothing
     
     Set AC_GroupByDeptID = _
-            EC_Filtered.MergeAllEmployeesOnDeptID() _
-                .ToArrayContainer(IncludeJobCode:=False)
+                         EC_Filtered.MergeAllEmployeesOnDeptID() _
+                         .ToArrayContainer(IncludeJobCode:=False)
     With Output.Worksheets.Item(2)
         .Name = "GrpBy DeptID"
         .Range( _
-            "A1:" _
-            & WBTools.GetColumnLetterByNumber(AC_GroupByDeptID.Columns) _
-            & Trim$(Str$(AC_GroupByDeptID.Rows)) _
+        "A1:" _
+      & WBTools.GetColumnLetterByNumber(AC_GroupByDeptID.Columns) _
+      & Trim$(Str$(AC_GroupByDeptID.Rows)) _
         ) = AC_GroupByDeptID.Data
     End With
     Set AC_GroupByDeptID = Nothing
     
     Set AC_GroupByJobCode = _
-            EC_Filtered.MergeAllEmployeesOnJobCode() _
-                .ToArrayContainer(IncludeDeptID:=False)
+                          EC_Filtered.MergeAllEmployeesOnJobCode() _
+                          .ToArrayContainer(IncludeDeptID:=False)
     Set EC_Filtered = Nothing
     With Output.Worksheets.Item(3)
         .Name = "GrpBy JobCode"
         .Range( _
-            "A1:" _
-            & WBTools.GetColumnLetterByNumber(AC_GroupByJobCode.Columns) _
-            & Trim$(Str$(AC_GroupByJobCode.Rows)) _
+        "A1:" _
+      & WBTools.GetColumnLetterByNumber(AC_GroupByJobCode.Columns) _
+      & Trim$(Str$(AC_GroupByJobCode.Rows)) _
         ) = AC_GroupByJobCode.Data
     End With
     Set AC_GroupByJobCode = Nothing
@@ -151,8 +149,8 @@ Public Sub Main()
     With Output
         Do
             OutputFileName = Application.GetSaveAsFilename( _
-                InitialFileName:="FTECalc_Output_" & GetTimestampStr() & ".xlsx", _
-                FileFilter:="Excel Files (*.xlsx),*.xlsx")
+                             InitialFileName:="FTECalc_Output_" & GetTimestampStr() & ".xlsx", _
+                             FileFilter:="Excel Files (*.xlsx),*.xlsx")
         Loop Until OutputFileName <> False
         
         .SaveAs FileName:=OutputFileName
@@ -164,3 +162,5 @@ End Sub
 Public Function UnixTime() As LongLong
     UnixTime = DateDiff("s", "1/1/1970 00:00:00", Now)
 End Function
+
+

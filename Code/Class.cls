@@ -19,7 +19,7 @@ Private Type TClass
     ' this.ContactHours will be used as a Dictionary
     ContactHours As Object
     CourseDescription As String
-    CourseID As String ' Subject + Catalog
+    CourseID As String                           ' Subject + Catalog
     DepartmentDescription As String
     DeptID As String
     EmplID As String
@@ -28,12 +28,13 @@ Private Type TClass
     EmplRcd As Integer
     FTE As Single
     IsCanceled As Boolean
-    IsLab As Boolean ' True: Lab, False: Lecture
+    IsLab As Boolean                             ' True: Lab, False: Lecture
     JobCode As String
     PayRate As Single
     '@Ignore IntegerDataType
     Units As Integer
 End Type
+
 Private this As TClass
 
 Private Sub Class_Initialize()
@@ -62,7 +63,7 @@ Private Sub Class_Initialize()
     this.ContactHours.Add "11B", 0
     this.ContactHours.Add "12A", 0
     this.ContactHours.Add "12B", 0
-    this.ContactHours.Add "OTH", 0 ' For non-Pay-Period-Specific cases
+    this.ContactHours.Add "OTH", 0               ' For non-Pay-Period-Specific cases
 End Sub
 
 Public Property Get ClassBegin() As Date
@@ -112,18 +113,18 @@ End Property
 Public Property Let ContactHours(ByVal PayPeriod As String, ByVal Hours As Single)
     this.ContactHours.Item(PayPeriod) = Hours
 End Property
-    
-  '  ContactHours As Integer
-  '  CourseDescription As String
-  '  CourseID As String ' Subject + Catalog
-  '  DepartmentDescription As String
-  '\  DeptID As String
-   ' EmplID As String
-   ' EmplName As String
-   ' EmplRcd As Integer
-   ' FTE As Single
-   ' IsCanceled As Boolean
-   ' IsLab As Boolean ' True: Lab, False: Lecture
-   ' JobCode As String
-   ' PayRate As Single
-   ' Units As Integer
+
+'  ContactHours As Integer
+'  CourseDescription As String
+'  CourseID As String ' Subject + Catalog
+'  DepartmentDescription As String
+'\  DeptID As String
+' EmplID As String
+' EmplName As String
+' EmplRcd As Integer
+' FTE As Single
+' IsCanceled As Boolean
+' IsLab As Boolean ' True: Lab, False: Lecture
+' JobCode As String
+' PayRate As Single
+' Units As Integer

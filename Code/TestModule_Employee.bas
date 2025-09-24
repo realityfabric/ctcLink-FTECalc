@@ -550,3 +550,235 @@ TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
     Resume TestExit
 End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_GetDeptID()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_GetEmplID()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_GetJobCode()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_GetName()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_LetDeptID()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_LetEmplID()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_LetJobCode()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_LetName()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_GetTimestamp()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_FTE()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("TODO")
+Private Sub TestMethod_HoursWorked_Initialize()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    
+    'Assert:
+    Assert.Inconclusive
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+

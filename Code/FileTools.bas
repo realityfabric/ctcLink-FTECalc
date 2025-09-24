@@ -69,9 +69,9 @@ End Function
 
 '@Description "Add list of filenames to a ListBox (lb)."
 Public Sub ListFiles(ByVal lb As ListBox, ByVal fileNames As Object)
-Attribute ListFiles.VB_Description = "Add list of filenames to a ListBox (lb)."
     Dim FileName As String
     For Each FileName In fileNames
         lb.AddItem (FileName)
     Next FileName
 End Sub
+

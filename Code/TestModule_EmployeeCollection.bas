@@ -34,7 +34,6 @@ Private Sub TestCleanup()
     'this method runs after every test in the module.
 End Sub
 
-
 '@TestMethod("Uncategorized")
 Private Sub Test_Add()
     On Error GoTo TestFail
@@ -434,7 +433,7 @@ Private Sub Test_ToArrayContainer()
     Data = AC.Data
     
     'Assert:
-    Assert.IsTrue AC.Rows = EC.Count + 1 ' Count + Headers
+    Assert.IsTrue AC.Rows = EC.Count + 1         ' Count + Headers
     Assert.IsTrue Data(0, 0) = "EmplID"
     Assert.IsTrue Data(0, 1) = "Name"
     Assert.IsTrue Data(0, 2) = "DeptID"
@@ -598,7 +597,6 @@ TestFail:
     Resume TestExit
 End Sub
 
-
 '@TestMethod("Uncategorized")
 Private Sub Test_CountUniqueEmplIDs_TwoEmployees_TwoUniqueEmployees()
     On Error GoTo TestFail
@@ -705,7 +703,6 @@ TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
     Resume TestExit
 End Sub
-
 
 '@TestMethod("Merge")
 Private Sub Test_MergeAllEmployeesOnEmplID_OneEmployee()
@@ -921,7 +918,6 @@ TestFail:
     Resume TestExit
 End Sub
 
-
 '@TestMethod("Merge")
 Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_Name()
     On Error GoTo TestFail
@@ -962,7 +958,6 @@ TestFail:
     Resume TestExit
 End Sub
 
-
 '@TestMethod("Merge")
 Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_DeptID()
     On Error GoTo TestFail
@@ -1002,7 +997,6 @@ TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
     Resume TestExit
 End Sub
-
 
 '@TestMethod("Merge")
 Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_JobCode()
@@ -1085,7 +1079,6 @@ TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
     Resume TestExit
 End Sub
-
 
 '@TestMethod("Multi-Method")
 Private Sub Test_MergeAllEmployees_ToArrayContainer_10Employees_1UniqueEmployee_Rows()
@@ -1212,7 +1205,6 @@ TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
     Resume TestExit
 End Sub
-
 
 '@TestMethod("Multi-Method")
 Private Sub Test_MergeAllEmployeesOnDeptID_ToArrayContainer_10Employees_2UniqueEmployee_Rows()
