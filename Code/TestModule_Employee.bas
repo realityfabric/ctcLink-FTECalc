@@ -35,7 +35,7 @@ Private Sub TestCleanup()
 End Sub
 
 '@TestMethod("Initialize")
-Private Sub TestMethod_Class_Initialize()
+Private Sub TestMethod_InitializeClass()
     On Error GoTo TestFail
     
     'Arrange:
@@ -63,7 +63,7 @@ TestFail:
 End Sub
 
 '@TestMethod("Getter")
-Private Sub TestMethod_HoursWorked_Get()
+Private Sub TestMethod_GetHoursWorked()
     On Error GoTo TestFail
     
     'Arrange:
@@ -97,7 +97,7 @@ TestFail:
 End Sub
 
 '@TestMethod("Letter")
-Private Sub TestMethod_HoursWorked_Let()
+Private Sub TestMethod_LetHoursWorked()
     On Error GoTo TestFail
     
     'Arrange:
@@ -762,7 +762,7 @@ TestFail:
 End Sub
 
 '@TestMethod("TODO")
-Private Sub TestMethod_HoursWorked_Initialize()
+Private Sub TestMethod_InitializeHoursWorked()
     On Error GoTo TestFail
     
     'Arrange:
