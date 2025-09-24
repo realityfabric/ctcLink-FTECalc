@@ -152,7 +152,7 @@ Public Function ToArrayContainer(Optional ByVal Headers As Boolean = True _
         DataArray(RowIndex, ColumnIndex) = Emp.HoursWorked()
         
         ColumnIndex = ColumnIndex + 1
-        DataArray(RowIndex, ColumnIndex) = Emp.FTE()
+        DataArray(RowIndex, ColumnIndex) = Emp.fte()
     Next CollectionIndex
     
     DataContainer.SetData RowCount, ColumnCount, DataArray

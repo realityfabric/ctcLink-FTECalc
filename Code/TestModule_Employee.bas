@@ -740,16 +740,47 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("TODO")
-Private Sub TestMethod_FTE()
+'@TestMethod("Calculation")
+Private Sub TestMethod_FTE_OTHeq10()
     On Error GoTo TestFail
     
     'Arrange:
+    Dim E As Employee
+    Set E = New Employee
+    Dim fte As Single
+    
+    E.HoursWorked("OTH") = 10
     
     'Act:
+    fte = E.fte()
     
     'Assert:
-    Assert.Inconclusive
+    Assert.IsTrue fte = 5.05
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("Calculation")
+Private Sub TestMethod_FTE_NoHours()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim E As Employee
+    Set E = New Employee
+    Dim fte As Single
+    
+    'Act:
+    fte = E.fte()
+    
+    'Assert:
+    Assert.IsTrue fte = 0
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext

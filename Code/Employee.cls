@@ -106,8 +106,8 @@ Public Property Let HoursWorked( _
     this.HoursWorked.Item(PayPeriod) = Value
 End Property
 
-Public Function FTE() As Single
-    FTE = HoursWorked() * 100 / 198
+Public Function fte() As Single
+    fte = Round(HoursWorked() * 100 / 198, 2)
 End Function
 
 ' Returns Employee if success, Nothing if fail

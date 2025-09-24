@@ -446,35 +446,35 @@ Private Sub Test_ToArrayContainer()
     Assert.IsTrue Data(1, 2) = "111"
     Assert.IsTrue Data(1, 3) = "1"
     Assert.IsTrue Data(1, 4) = 5
-    Assert.IsTrue Data(1, 5) = (5 * 100 / 198)
+    Assert.IsTrue Data(1, 5) = Round(5 * 100 / 198, 2)
     
     Assert.IsTrue Data(2, 0) = "2000"
     Assert.IsTrue Data(2, 1) = Names(2)
     Assert.IsTrue Data(2, 2) = "222"
     Assert.IsTrue Data(2, 3) = "2"
     Assert.IsTrue Data(2, 4) = 10
-    Assert.IsTrue Data(2, 5) = (10 * 100 / 198)
+    Assert.IsTrue Data(2, 5) = Round(10 * 100 / 198, 2)
     
     Assert.IsTrue Data(3, 0) = "3000"
     Assert.IsTrue Data(3, 1) = Names(3)
     Assert.IsTrue Data(3, 2) = "333"
     Assert.IsTrue Data(3, 3) = "3"
     Assert.IsTrue Data(3, 4) = 15
-    Assert.IsTrue Data(3, 5) = (15 * 100 / 198)
+    Assert.IsTrue Data(3, 5) = Round(15 * 100 / 198, 2)
     
     Assert.IsTrue Data(4, 0) = "4000"
     Assert.IsTrue Data(4, 1) = Names(4)
     Assert.IsTrue Data(4, 2) = "444"
     Assert.IsTrue Data(4, 3) = "4"
     Assert.IsTrue Data(4, 4) = 20
-    Assert.IsTrue Data(4, 5) = (20 * 100 / 198)
+    Assert.IsTrue Data(4, 5) = Round(20 * 100 / 198, 2)
 
     Assert.IsTrue Data(5, 0) = "5000"
     Assert.IsTrue Data(5, 1) = Names(5)
     Assert.IsTrue Data(5, 2) = "555"
     Assert.IsTrue Data(5, 3) = "5"
     Assert.IsTrue Data(5, 4) = 25
-    Assert.IsTrue Data(5, 5) = (25 * 100 / 198)
+    Assert.IsTrue Data(5, 5) = Round(25 * 100 / 198, 2)
     
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext

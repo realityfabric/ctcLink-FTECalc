@@ -26,7 +26,7 @@ Private Type TClass
     EmplName As String
     '@Ignore IntegerDataType
     EmplRcd As Integer
-    FTE As Single
+    fte As Single
     IsCanceled As Boolean
     IsLab As Boolean                             ' True: Lab, False: Lecture
     JobCode As String
