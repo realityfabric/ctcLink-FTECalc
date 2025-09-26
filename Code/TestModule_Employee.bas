@@ -551,16 +551,21 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("TODO")
+'@TestMethod("Getter")
 Private Sub TestMethod_GetDeptID()
     On Error GoTo TestFail
     
     'Arrange:
+    Dim E As Employee
+    Dim id As String
+    Set E = New Employee
+    E.DeptID = "12345"
     
     'Act:
+    id = E.DeptID
     
     'Assert:
-    Assert.Inconclusive
+    Assert.IsTrue id = "12345"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -572,16 +577,22 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("TODO")
+'@TestMethod("Getter")
 Private Sub TestMethod_GetEmplID()
     On Error GoTo TestFail
     
     'Arrange:
+    Dim E As Employee
+    Dim id As String
+    Set E = New Employee
+    E.EmplID = "12345"
     
     'Act:
     
+    id = E.EmplID
+    
     'Assert:
-    Assert.Inconclusive
+    Assert.IsTrue id = "12345"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -593,16 +604,22 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("TODO")
+'@TestMethod("Getter")
 Private Sub TestMethod_GetJobCode()
     On Error GoTo TestFail
     
     'Arrange:
+    Dim E As Employee
+    Dim jc As String
+    Set E = New Employee
+    E.JobCode = "ABC"
     
     'Act:
     
+    jc = E.JobCode
+    
     'Assert:
-    Assert.Inconclusive
+    Assert.jc = "ABC"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -614,16 +631,22 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("TODO")
+'@TestMethod("Getter")
 Private Sub TestMethod_GetName()
     On Error GoTo TestFail
     
     'Arrange:
+    Dim E As Employee
+    Dim n As String
+    Set E = New Employee
+    E.Name = "Harry Haywood"
     
     'Act:
     
+    n = E.Name
+    
     'Assert:
-    Assert.Inconclusive
+    Assert.IsTrue n = "Harry Haywood"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -635,16 +658,19 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("TODO")
+'@TestMethod("Letter")
 Private Sub TestMethod_LetDeptID()
     On Error GoTo TestFail
     
     'Arrange:
+    Dim E As Employee
+    Set E = New Employee
     
     'Act:
+    E.DeptID = "12345"
     
     'Assert:
-    Assert.Inconclusive
+    Assert.IsTrue E.DeptID = "12345"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
