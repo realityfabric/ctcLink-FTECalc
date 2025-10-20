@@ -13,7 +13,7 @@ Option Explicit
 Private Type TArrayContainer
     Data() As Variant
     Rows As Long
-    Columns As Long
+    columns As Long
 End Type
 
 Private this As TArrayContainer
@@ -22,9 +22,9 @@ Public Property Get Data() As Variant()          '(ByVal Row As Long, ByVal Colu
     Data = this.Data                             '(Row, Column)
 End Property
 
-Public Sub SetData(ByVal Rows As Long, ByVal Columns As Long, ByVal DataArray As Variant)
+Public Sub SetData(ByVal Rows As Long, ByVal columns As Long, ByVal DataArray As Variant)
     this.Rows = Rows
-    this.Columns = Columns
+    this.columns = columns
     this.Data = DataArray
 End Sub
 
@@ -32,7 +32,7 @@ Public Property Get Rows() As Long
     Rows = this.Rows
 End Property
 
-Public Property Get Columns() As Long
-    Columns = this.Columns
+Public Property Get columns() As Long
+    columns = this.columns
 End Property
 

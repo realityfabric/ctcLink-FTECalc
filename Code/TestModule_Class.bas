@@ -41,14 +41,14 @@ Private Sub Test_ClassBeginEqual19010101()
     
     'Arrange:
     '@Ignore UseMeaningfulName
-    Dim C As Class
-    Set C = New Class
+    Dim c As Class
+    Set c = New Class
     
     'Act:
-    C.ClassBegin = #1/1/1901#
+    c.ClassBegin = #1/1/1901#
     
     'Assert:
-    Assert.IsTrue C.ClassBegin = #1/1/1901#
+    Assert.IsTrue c.ClassBegin = #1/1/1901#
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -67,14 +67,14 @@ Private Sub Test_ClassEndEqual19010101()
     
     'Arrange:
     '@Ignore UseMeaningfulName
-    Dim C As Class
-    Set C = New Class
+    Dim c As Class
+    Set c = New Class
     
     'Act:
-    C.ClassEnd = #1/1/1901#
+    c.ClassEnd = #1/1/1901#
     
     'Assert:
-    Assert.IsTrue C.ClassEnd = #1/1/1901#
+    Assert.IsTrue c.ClassEnd = #1/1/1901#
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -91,14 +91,14 @@ Private Sub Test_ClassNumberEqualsABCD()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim C As Class
-    Set C = New Class
+    Dim c As Class
+    Set c = New Class
     
     'Act:
-    C.ClassNumber = "ABCD"
+    c.ClassNumber = "ABCD"
     
     'Assert:
-    Assert.IsTrue C.ClassNumber = "ABCD"
+    Assert.IsTrue c.ClassNumber = "ABCD"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -115,14 +115,14 @@ Private Sub Test_ClassNumberEquals1234()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim C As Class
-    Set C = New Class
+    Dim c As Class
+    Set c = New Class
     
     'Act:
-    C.ClassNumber = "1234"
+    c.ClassNumber = "1234"
     
     'Assert:
-    Assert.IsTrue C.ClassNumber = "1234"
+    Assert.IsTrue c.ClassNumber = "1234"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -139,14 +139,14 @@ Private Sub Test_ComboCodeEqualsABCD()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim C As Class
-    Set C = New Class
+    Dim c As Class
+    Set c = New Class
     
     'Act:
-    C.ComboCode = "ABCD"
+    c.ComboCode = "ABCD"
     
     'Assert:
-    Assert.IsTrue C.ComboCode = "ABCD"
+    Assert.IsTrue c.ComboCode = "ABCD"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -163,37 +163,37 @@ Private Sub Test_ContactHoursAreZeroByDefault()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim C As Class
+    Dim c As Class
     
     'Act:
-    Set C = New Class
+    Set c = New Class
     
     'Assert:
-    Assert.IsTrue C.ContactHours("01A") = 0
-    Assert.IsTrue C.ContactHours("01B") = 0
-    Assert.IsTrue C.ContactHours("02A") = 0
-    Assert.IsTrue C.ContactHours("02B") = 0
-    Assert.IsTrue C.ContactHours("03A") = 0
-    Assert.IsTrue C.ContactHours("03B") = 0
-    Assert.IsTrue C.ContactHours("04A") = 0
-    Assert.IsTrue C.ContactHours("04B") = 0
-    Assert.IsTrue C.ContactHours("05A") = 0
-    Assert.IsTrue C.ContactHours("05B") = 0
-    Assert.IsTrue C.ContactHours("06A") = 0
-    Assert.IsTrue C.ContactHours("06B") = 0
-    Assert.IsTrue C.ContactHours("07A") = 0
-    Assert.IsTrue C.ContactHours("07B") = 0
-    Assert.IsTrue C.ContactHours("08A") = 0
-    Assert.IsTrue C.ContactHours("08B") = 0
-    Assert.IsTrue C.ContactHours("09A") = 0
-    Assert.IsTrue C.ContactHours("09B") = 0
-    Assert.IsTrue C.ContactHours("10A") = 0
-    Assert.IsTrue C.ContactHours("10B") = 0
-    Assert.IsTrue C.ContactHours("11A") = 0
-    Assert.IsTrue C.ContactHours("11B") = 0
-    Assert.IsTrue C.ContactHours("12A") = 0
-    Assert.IsTrue C.ContactHours("12B") = 0
-    Assert.IsTrue C.ContactHours("OTH") = 0
+    Assert.IsTrue c.ContactHours("01A") = 0
+    Assert.IsTrue c.ContactHours("01B") = 0
+    Assert.IsTrue c.ContactHours("02A") = 0
+    Assert.IsTrue c.ContactHours("02B") = 0
+    Assert.IsTrue c.ContactHours("03A") = 0
+    Assert.IsTrue c.ContactHours("03B") = 0
+    Assert.IsTrue c.ContactHours("04A") = 0
+    Assert.IsTrue c.ContactHours("04B") = 0
+    Assert.IsTrue c.ContactHours("05A") = 0
+    Assert.IsTrue c.ContactHours("05B") = 0
+    Assert.IsTrue c.ContactHours("06A") = 0
+    Assert.IsTrue c.ContactHours("06B") = 0
+    Assert.IsTrue c.ContactHours("07A") = 0
+    Assert.IsTrue c.ContactHours("07B") = 0
+    Assert.IsTrue c.ContactHours("08A") = 0
+    Assert.IsTrue c.ContactHours("08B") = 0
+    Assert.IsTrue c.ContactHours("09A") = 0
+    Assert.IsTrue c.ContactHours("09B") = 0
+    Assert.IsTrue c.ContactHours("10A") = 0
+    Assert.IsTrue c.ContactHours("10B") = 0
+    Assert.IsTrue c.ContactHours("11A") = 0
+    Assert.IsTrue c.ContactHours("11B") = 0
+    Assert.IsTrue c.ContactHours("12A") = 0
+    Assert.IsTrue c.ContactHours("12B") = 0
+    Assert.IsTrue c.ContactHours("OTH") = 0
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -210,13 +210,13 @@ Private Sub Test_ContactHoursWithoutArgZeroByDefault()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim C As Class
+    Dim c As Class
     
     'Act:
-    Set C = New Class
+    Set c = New Class
     
     'Assert:
-    Assert.IsTrue C.ContactHours() = 0
+    Assert.IsTrue c.ContactHours() = 0
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -233,63 +233,63 @@ Private Sub Test_ContactHoursSetTo10ForEachPeriod()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim C As Class
-    Set C = New Class
+    Dim c As Class
+    Set c = New Class
     
     'Act:
-    C.ContactHours("01A") = 10
-    C.ContactHours("01B") = 10
-    C.ContactHours("02A") = 10
-    C.ContactHours("02B") = 10
-    C.ContactHours("03A") = 10
-    C.ContactHours("03B") = 10
-    C.ContactHours("04A") = 10
-    C.ContactHours("04B") = 10
-    C.ContactHours("05A") = 10
-    C.ContactHours("05B") = 10
-    C.ContactHours("06A") = 10
-    C.ContactHours("06B") = 10
-    C.ContactHours("07A") = 10
-    C.ContactHours("07B") = 10
-    C.ContactHours("08A") = 10
-    C.ContactHours("08B") = 10
-    C.ContactHours("09A") = 10
-    C.ContactHours("09B") = 10
-    C.ContactHours("10A") = 10
-    C.ContactHours("10B") = 10
-    C.ContactHours("11A") = 10
-    C.ContactHours("11B") = 10
-    C.ContactHours("12A") = 10
-    C.ContactHours("12B") = 10
-    C.ContactHours("OTH") = 10
+    c.ContactHours("01A") = 10
+    c.ContactHours("01B") = 10
+    c.ContactHours("02A") = 10
+    c.ContactHours("02B") = 10
+    c.ContactHours("03A") = 10
+    c.ContactHours("03B") = 10
+    c.ContactHours("04A") = 10
+    c.ContactHours("04B") = 10
+    c.ContactHours("05A") = 10
+    c.ContactHours("05B") = 10
+    c.ContactHours("06A") = 10
+    c.ContactHours("06B") = 10
+    c.ContactHours("07A") = 10
+    c.ContactHours("07B") = 10
+    c.ContactHours("08A") = 10
+    c.ContactHours("08B") = 10
+    c.ContactHours("09A") = 10
+    c.ContactHours("09B") = 10
+    c.ContactHours("10A") = 10
+    c.ContactHours("10B") = 10
+    c.ContactHours("11A") = 10
+    c.ContactHours("11B") = 10
+    c.ContactHours("12A") = 10
+    c.ContactHours("12B") = 10
+    c.ContactHours("OTH") = 10
     
     
     'Assert:
-    Assert.IsTrue C.ContactHours("01A") = 10
-    Assert.IsTrue C.ContactHours("01B") = 10
-    Assert.IsTrue C.ContactHours("02A") = 10
-    Assert.IsTrue C.ContactHours("02B") = 10
-    Assert.IsTrue C.ContactHours("03A") = 10
-    Assert.IsTrue C.ContactHours("03B") = 10
-    Assert.IsTrue C.ContactHours("04A") = 10
-    Assert.IsTrue C.ContactHours("04B") = 10
-    Assert.IsTrue C.ContactHours("05A") = 10
-    Assert.IsTrue C.ContactHours("05B") = 10
-    Assert.IsTrue C.ContactHours("06A") = 10
-    Assert.IsTrue C.ContactHours("06B") = 10
-    Assert.IsTrue C.ContactHours("07A") = 10
-    Assert.IsTrue C.ContactHours("07B") = 10
-    Assert.IsTrue C.ContactHours("08A") = 10
-    Assert.IsTrue C.ContactHours("08B") = 10
-    Assert.IsTrue C.ContactHours("09A") = 10
-    Assert.IsTrue C.ContactHours("09B") = 10
-    Assert.IsTrue C.ContactHours("10A") = 10
-    Assert.IsTrue C.ContactHours("10B") = 10
-    Assert.IsTrue C.ContactHours("11A") = 10
-    Assert.IsTrue C.ContactHours("11B") = 10
-    Assert.IsTrue C.ContactHours("12A") = 10
-    Assert.IsTrue C.ContactHours("12B") = 10
-    Assert.IsTrue C.ContactHours("OTH") = 10
+    Assert.IsTrue c.ContactHours("01A") = 10
+    Assert.IsTrue c.ContactHours("01B") = 10
+    Assert.IsTrue c.ContactHours("02A") = 10
+    Assert.IsTrue c.ContactHours("02B") = 10
+    Assert.IsTrue c.ContactHours("03A") = 10
+    Assert.IsTrue c.ContactHours("03B") = 10
+    Assert.IsTrue c.ContactHours("04A") = 10
+    Assert.IsTrue c.ContactHours("04B") = 10
+    Assert.IsTrue c.ContactHours("05A") = 10
+    Assert.IsTrue c.ContactHours("05B") = 10
+    Assert.IsTrue c.ContactHours("06A") = 10
+    Assert.IsTrue c.ContactHours("06B") = 10
+    Assert.IsTrue c.ContactHours("07A") = 10
+    Assert.IsTrue c.ContactHours("07B") = 10
+    Assert.IsTrue c.ContactHours("08A") = 10
+    Assert.IsTrue c.ContactHours("08B") = 10
+    Assert.IsTrue c.ContactHours("09A") = 10
+    Assert.IsTrue c.ContactHours("09B") = 10
+    Assert.IsTrue c.ContactHours("10A") = 10
+    Assert.IsTrue c.ContactHours("10B") = 10
+    Assert.IsTrue c.ContactHours("11A") = 10
+    Assert.IsTrue c.ContactHours("11B") = 10
+    Assert.IsTrue c.ContactHours("12A") = 10
+    Assert.IsTrue c.ContactHours("12B") = 10
+    Assert.IsTrue c.ContactHours("OTH") = 10
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -306,38 +306,38 @@ Private Sub Test_ContactHoursSetTo10ForEachPeriodWithoutArgsEquals250()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim C As Class
-    Set C = New Class
+    Dim c As Class
+    Set c = New Class
     
     'Act:
-    C.ContactHours("01A") = 10
-    C.ContactHours("01B") = 10
-    C.ContactHours("02A") = 10
-    C.ContactHours("02B") = 10
-    C.ContactHours("03A") = 10
-    C.ContactHours("03B") = 10
-    C.ContactHours("04A") = 10
-    C.ContactHours("04B") = 10
-    C.ContactHours("05A") = 10
-    C.ContactHours("05B") = 10
-    C.ContactHours("06A") = 10
-    C.ContactHours("06B") = 10
-    C.ContactHours("07A") = 10
-    C.ContactHours("07B") = 10
-    C.ContactHours("08A") = 10
-    C.ContactHours("08B") = 10
-    C.ContactHours("09A") = 10
-    C.ContactHours("09B") = 10
-    C.ContactHours("10A") = 10
-    C.ContactHours("10B") = 10
-    C.ContactHours("11A") = 10
-    C.ContactHours("11B") = 10
-    C.ContactHours("12A") = 10
-    C.ContactHours("12B") = 10
-    C.ContactHours("OTH") = 10
+    c.ContactHours("01A") = 10
+    c.ContactHours("01B") = 10
+    c.ContactHours("02A") = 10
+    c.ContactHours("02B") = 10
+    c.ContactHours("03A") = 10
+    c.ContactHours("03B") = 10
+    c.ContactHours("04A") = 10
+    c.ContactHours("04B") = 10
+    c.ContactHours("05A") = 10
+    c.ContactHours("05B") = 10
+    c.ContactHours("06A") = 10
+    c.ContactHours("06B") = 10
+    c.ContactHours("07A") = 10
+    c.ContactHours("07B") = 10
+    c.ContactHours("08A") = 10
+    c.ContactHours("08B") = 10
+    c.ContactHours("09A") = 10
+    c.ContactHours("09B") = 10
+    c.ContactHours("10A") = 10
+    c.ContactHours("10B") = 10
+    c.ContactHours("11A") = 10
+    c.ContactHours("11B") = 10
+    c.ContactHours("12A") = 10
+    c.ContactHours("12B") = 10
+    c.ContactHours("OTH") = 10
     
     'Assert:
-    Assert.IsTrue C.ContactHours() = 250
+    Assert.IsTrue c.ContactHours() = 250
     
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
