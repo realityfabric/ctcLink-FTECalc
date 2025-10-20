@@ -287,7 +287,6 @@ Public Function MergeAllEmployees() As EmployeeCollection
     For Each EmplIDKey In EmplIDs.Keys
         For Each DeptIDKey In DeptIDs.Keys
             For Each JobCodeKey In JobCodes.Keys
-                Debug.Print "E: " & EmplIDKey & "; D: " & DeptIDKey & "; J: " & JobCodeKey
                 Set FilteredCollection = Filter( _
                                          EmplIDFilter:=EmplIDKey, _
                                          DeptIDFilter:=DeptIDKey, _
