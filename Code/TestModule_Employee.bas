@@ -711,11 +711,14 @@ Private Sub TestMethod_LetJobCode()
     On Error GoTo TestFail
     
     'Arrange:
+    Dim E As Employee
+    Set E = New Employee
     
     'Act:
+    E.JobCode = "ABC"
     
     'Assert:
-    Assert.Inconclusive
+    Assert.IsTrue E.JobCode = "ABC"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
