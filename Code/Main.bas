@@ -107,12 +107,14 @@ Public Sub Main()
         Application.DisplayAlerts = ApplicationDisplayAlerts
     End With
     
-    Set AC_Filtered_Merged = EC_Filtered.MergeAllEmployees().ToArrayContainer()
+    Dim EC_Temporary As EmployeeCollection
+    Set EC_Temporary = EC_Filtered.MergeAllEmployees()
+    Set AC_Filtered_Merged = EC_Temporary.ToArrayContainer()
     With Output.Worksheets.Item(1)
         .Name = "FTE Summary"
         .Range( _
         "A1:" _
-      & WBTools.GetColumnLetterByNumber(AC_Filtered_Merged.Columns) _
+      & WBTools.GetColumnLetterByNumber(AC_Filtered_Merged.columns) _
       & Trim$(Str$(AC_Filtered_Merged.Rows)) _
         ) = AC_Filtered_Merged.Data
     End With
@@ -125,7 +127,7 @@ Public Sub Main()
         .Name = "GrpBy DeptID"
         .Range( _
         "A1:" _
-      & WBTools.GetColumnLetterByNumber(AC_GroupByDeptID.Columns) _
+      & WBTools.GetColumnLetterByNumber(AC_GroupByDeptID.columns) _
       & Trim$(Str$(AC_GroupByDeptID.Rows)) _
         ) = AC_GroupByDeptID.Data
     End With
@@ -139,7 +141,7 @@ Public Sub Main()
         .Name = "GrpBy JobCode"
         .Range( _
         "A1:" _
-      & WBTools.GetColumnLetterByNumber(AC_GroupByJobCode.Columns) _
+      & WBTools.GetColumnLetterByNumber(AC_GroupByJobCode.columns) _
       & Trim$(Str$(AC_GroupByJobCode.Rows)) _
         ) = AC_GroupByJobCode.Data
     End With
