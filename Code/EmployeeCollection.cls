@@ -337,7 +337,8 @@ Public Function MergeAllEmployeesOnDeptID() As EmployeeCollection
                 Next Index
             End If
 
-            If FilteredCollection.Count > 0 Then MergedCollection.Add MergedEmployee
+            If FilteredCollection.Count > 0 And _
+                Not (MergedEmployee Is Nothing) Then MergedCollection.Add MergedEmployee
         Next DeptIDKey
     Next EmplIDKey
     
@@ -368,7 +369,8 @@ Public Function MergeAllEmployeesOnJobCode() As EmployeeCollection
                                      FilteredCollection.Item(Index), _
                                      PreserveDeptID:=False)
             Next Index
-            If FilteredCollection.Count > 0 Then MergedCollection.Add MergedEmployee
+            If FilteredCollection.Count > 0 And _
+                Not (MergedEmployee Is Nothing) Then MergedCollection.Add MergedEmployee
         Next JobCodeKey
     Next EmplIDKey
     
