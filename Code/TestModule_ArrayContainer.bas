@@ -61,17 +61,49 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("TODO")
+'@TestMethod("Setter")
 Private Sub TestMethod_SetData()
     On Error GoTo TestFail
     
     'Arrange:
+    Dim AC As ArrayContainer
+    Dim DA(2, 3) As Variant
+    Dim c As Long
+    Dim r As Long
+    
+    c = 3
+    r = 2
+    
+    Set AC = New ArrayContainer
+    
+    DA(0, 0) = "A"
+    DA(0, 1) = "B"
+    DA(0, 2) = "C"
+    DA(0, 3) = "D"
+    DA(1, 0) = "E"
+    DA(1, 1) = "F"
+    DA(1, 2) = "G"
+    DA(1, 3) = "H"
+    DA(2, 0) = "I"
+    DA(2, 1) = "J"
+    DA(2, 2) = "K"
+    DA(2, 3) = "L"
     
     'Act:
+    AC.SetData r, c, DA
+    
     
     'Assert:
-    Assert.Inconclusive
-
+    Assert.IsTrue AC.Rows = 2
+    Assert.IsTrue AC.columns = 3
+    
+    Dim r_index As Long
+    Dim c_index As Long
+    For r_index = 0 To r
+        For c_index = 0 To c
+            Assert.IsTrue AC.Data(r_index, c_index) = DA(r_index, c_index)
+        Next c_index
+    Next r_index
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
     On Error Resume Next
