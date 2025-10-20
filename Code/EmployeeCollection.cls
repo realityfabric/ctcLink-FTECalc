@@ -133,6 +133,8 @@ Public Function ToArrayContainer(Optional ByVal Headers As Boolean = True _
         RowIndex = RowIndex + 1
         ColumnIndex = 0
         Set Emp = Item(CollectionIndex)
+        ' Crashes because sometimes Item(CollectionIndex) returns Nothing
+        ' Because at this point in the code, sometimes this.Employees has records with Nothing
         DataArray(RowIndex, ColumnIndex) = Emp.EmplID
         
         ColumnIndex = ColumnIndex + 1
