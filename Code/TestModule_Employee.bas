@@ -735,11 +735,14 @@ Private Sub TestMethod_LetName()
     On Error GoTo TestFail
     
     'Arrange:
+    Dim E As Employee
+    Set E = New Employee
     
     'Act:
+    E.Name = "Rosa Luxemburg"
     
     'Assert:
-    Assert.Inconclusive
+    Assert.IsTrue E.Name = "Rosa Luxemburg"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
