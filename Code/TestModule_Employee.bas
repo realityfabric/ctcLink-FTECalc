@@ -687,11 +687,14 @@ Private Sub TestMethod_LetEmplID()
     On Error GoTo TestFail
     
     'Arrange:
+    Dim E As Employee
+    Set E = New Employee
     
     'Act:
+    E.EmplID = "123456789"
     
     'Assert:
-    Assert.Inconclusive
+    Assert.IsTrue E.EmplID = "123456789"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
