@@ -120,9 +120,8 @@ Public Sub Main()
     End With
     Set AC_Filtered_Merged = Nothing
     
-    Set AC_GroupByDeptID = _
-                         EC_Filtered.MergeAllEmployeesOnDeptID() _
-                         .ToArrayContainer(IncludeJobCode:=False)
+    Set EC_Temporary = EC_Filtered.MergeAllEmployeesOnDeptID()
+    Set AC_GroupByDeptID = EC_Temporary.ToArrayContainer(IncludeJobCode:=False)
     With Output.Worksheets.Item(2)
         .Name = "GrpBy DeptID"
         .Range( _
