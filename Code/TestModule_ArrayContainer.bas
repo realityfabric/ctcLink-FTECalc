@@ -96,14 +96,8 @@ Private Sub TestMethod_SetData()
     'Assert:
     Assert.IsTrue AC.Rows = 2
     Assert.IsTrue AC.columns = 3
+    Assert.SequenceEquals AC.Data(), DA
     
-    Dim r_index As Long
-    Dim c_index As Long
-    For r_index = 0 To r
-        For c_index = 0 To c
-            Assert.IsTrue AC.Data(r_index, c_index) = DA(r_index, c_index)
-        Next c_index
-    Next r_index
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
     On Error Resume Next

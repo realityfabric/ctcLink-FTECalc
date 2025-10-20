@@ -18,8 +18,12 @@ End Type
 
 Private this As TArrayContainer
 
-Public Property Get Data() As Variant()          '(ByVal Row As Long, ByVal Column As Long As Variant
-    Data = this.Data                             '(Row, Column)
+Public Property Get Data(Optional ByVal Row As Long = 0, Optional ByVal Column As Long = 0) As Variant()          '(ByVal Row As Long, ByVal Column As Long As Variant
+    If Row < 1 Or Column < 1 Then
+        Data = this.Data
+    Else
+        Data = this.Data(Row, Column)
+    End If
 End Property
 
 Public Sub SetData(ByVal Rows As Long, ByVal columns As Long, ByVal DataArray As Variant)
