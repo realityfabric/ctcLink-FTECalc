@@ -619,7 +619,7 @@ Private Sub TestMethod_GetJobCode()
     jc = E.JobCode
     
     'Assert:
-    Assert.jc = "ABC"
+    Assert.IsTrue jc = "ABC"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
