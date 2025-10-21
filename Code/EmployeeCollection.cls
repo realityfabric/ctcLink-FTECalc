@@ -44,18 +44,18 @@ Public Sub Concat(ByVal EmployeeCollection2 As EmployeeCollection)
     Next Index
 End Sub
 
-Public Function Filter(Optional ByVal EmplIDFilter As String = vbNullString _
-                       , Optional ByVal DeptIDFilter As String = vbNullString _
-                        , Optional ByVal JobCodeFilter As String = vbNullString _
+Public Function Filter(Optional ByVal EmplIDFilter As Variant = Null _
+                       , Optional ByVal DeptIDFilter As Variant = Null _
+                        , Optional ByVal JobCodeFilter As Variant = Null _
                          ) As EmployeeCollection
     Dim FilteredCollection As EmployeeCollection
     Dim Index As Long
     Set FilteredCollection = New EmployeeCollection
-
+    
     For Index = 1 To Count
-        If (EmplIDFilter = vbNullString Or EmplIDFilter = Item(Index).EmplID) _
-           And (DeptIDFilter = vbNullString Or DeptIDFilter = Item(Index).DeptID) _
-           And (JobCodeFilter = vbNullString Or JobCodeFilter = Item(Index).JobCode) Then
+        If (IsNull(EmplIDFilter) Or (EmplIDFilter = Item(Index).EmplID)) _
+           And (IsNull(DeptIDFilter) Or (DeptIDFilter = Item(Index).DeptID)) _
+           And (IsNull(JobCodeFilter) Or (JobCodeFilter = Item(Index).JobCode)) Then
             FilteredCollection.Add Item(Index)
         End If
     Next Index
@@ -282,16 +282,13 @@ Public Function MergeAllEmployees() As EmployeeCollection
     Set JobCodes = UniqueJobCodes()
     
     For Each EmplIDKey In EmplIDs.Keys
-        If EmplIDKey <> "" Then
+        If EmplIDKey <> vbNullString Then
             For Each DeptIDKey In DeptIDs.Keys
                 For Each JobCodeKey In JobCodes.Keys
-                    Debug.Print EmplIDKey & " | " & DeptIDKey & " | " & JobCodeKey
                     Set FilteredCollection = Filter( _
                                              EmplIDFilter:=EmplIDKey, _
                                              DeptIDFilter:=DeptIDKey, _
                                              JobCodeFilter:=JobCodeKey)
-                    Dim Flag As Boolean
-                    Flag = (EmplIDKey = "101050810") And (DeptIDKey = "") And (JobCodeKey = "PTF")
                     If FilteredCollection.Count > 0 Then
                         Set MergedEmployee = FilteredCollection.Item(1)
                     
