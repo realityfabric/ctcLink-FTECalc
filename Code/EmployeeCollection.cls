@@ -435,7 +435,7 @@ Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
         
         ' If there is an EmplID and the class is not canceled, then...
         If WBTools.getCellValueAt(ws, EmplIDCol, Row) <> Empty _
-           And WBTools.getCellValueAt(ws, CanceledClassCol, Row) = Empty Then
+           And isEmpty(WBTools.getCellValueAt(ws, CanceledClassCol, Row)) Then
             
             Emp.EmplID = WBTools.getCellValueAt(ws, EmplIDCol, Row)
             Emp.Name = WBTools.getCellValueAt(ws, NameCol, Row)
@@ -495,7 +495,7 @@ Private Function CreateEmployeeCollectionFromWorksheet_Appointed( _
         
         ' Not empty, not canceled, and a number value (ignore Independent Study)
         If WBTools.getCellValueAt(ws, EmplIDCol, Row) <> Empty _
-           And WBTools.getCellValueAt(ws, CanceledClassCol, Row) = Empty _
+           And isEmpty(WBTools.getCellValueAt(ws, CanceledClassCol, Row)) _
            And ( _
            VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 2 Or _
            VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 3 Or _
