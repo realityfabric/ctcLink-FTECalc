@@ -380,24 +380,24 @@ Public Function MergeAllEmployeesOnJobCode() As EmployeeCollection
 End Function
 
 Public Function CreateEmployeeCollectionFromWorksheet( _
-       ByVal ws As Worksheet, _
+       ByVal EmployeesWorksheet As Worksheet, _
        ByVal IsHourly As Boolean, _
        Optional ByVal HeaderRow As Long = 1 _
        ) As EmployeeCollection
     If IsHourly Then
         Set CreateEmployeeCollectionFromWorksheet = _
-                                                  CreateEmployeeCollectionFromWorksheet_Hourly(ws, HeaderRow)
+                                                  CreateEmployeeCollectionFromWorksheet_Hourly(EmployeesWorksheet, HeaderRow)
     Else
         Set CreateEmployeeCollectionFromWorksheet = _
-                                                  CreateEmployeeCollectionFromWorksheet_Appointed(ws, HeaderRow)
+                                                  CreateEmployeeCollectionFromWorksheet_Appointed(EmployeesWorksheet, HeaderRow)
     End If
 End Function
 
 Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
-        ByVal ws As Worksheet, _
+        ByVal EmployeesWorksheet As Worksheet, _
         ByVal HeaderRow As Long _
         ) As EmployeeCollection
-    Dim EC As EmployeeCollection
+    Dim Employees As EmployeeCollection
     Dim Emp As Employee
     
     Dim LastRow As Long
@@ -407,7 +407,7 @@ Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
     Dim JobCodeCol As Long
     Dim CanceledClassCol As Long
     
-    Set EC = New EmployeeCollection
+    Set Employees = New EmployeeCollection
     
     ' 01A, 01B, 02A, ..., 12A, 12B
     Dim PayPeriodCol(24) As Long
@@ -416,12 +416,12 @@ Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
     Dim Index As Long
     Dim Row As Long
     
-    LastRow = WBTools.FindLastRowInSheet(ws)
-    EmplIDCol = WBTools.FindColumnLikeName(ws, "*Empl*ID*")
-    NameCol = WBTools.FindColumnLikeName(ws, "Name*")
+    LastRow = WBTools.FindLastRowInSheet(EmployeesWorksheet)
+    EmplIDCol = WBTools.FindColumnLikeName(EmployeesWorksheet, "*Empl*ID*")
+    NameCol = WBTools.FindColumnLikeName(EmployeesWorksheet, "Name*")
     DeptIDCol = 4
-    JobCodeCol = WBTools.FindColumnLikeName(ws, "*Job Code*")
-    CanceledClassCol = WBTools.FindColumnByName(ws, "Canceled Class")
+    JobCodeCol = WBTools.FindColumnLikeName(EmployeesWorksheet, "*Job Code*")
+    CanceledClassCol = WBTools.FindColumnByName(EmployeesWorksheet, "Canceled Class")
     
     For Index = 0 To 23
         If Index Mod 2 = 0 Then
@@ -430,20 +430,20 @@ Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
             PayPeriodString = Format$(WorksheetFunction.RoundUp((Index + 1) / 2, 0), "00") & "B"
         End If
         
-        PayPeriodCol(Index) = WBTools.FindColumnLikeName(ws, PayPeriodString & "*")
+        PayPeriodCol(Index) = WBTools.FindColumnLikeName(EmployeesWorksheet, PayPeriodString & "*")
     Next Index
     
     For Row = HeaderRow + 1 To LastRow
         Set Emp = New Employee
         
         ' If there is an EmplID and the class is not canceled, then...
-        If WBTools.getCellValueAt(ws, EmplIDCol, Row) <> Empty _
-           And isEmpty(WBTools.getCellValueAt(ws, CanceledClassCol, Row)) Then
+        If WBTools.getCellValueAt(EmployeesWorksheet, EmplIDCol, Row) <> Empty _
+           And isEmpty(WBTools.getCellValueAt(EmployeesWorksheet, CanceledClassCol, Row)) Then
             
-            Emp.EmplID = WBTools.getCellValueAt(ws, EmplIDCol, Row)
-            Emp.Name = WBTools.getCellValueAt(ws, NameCol, Row)
-            Emp.DeptID = WBTools.getCellValueAt(ws, DeptIDCol, Row)
-            Emp.JobCode = WBTools.getCellValueAt(ws, JobCodeCol, Row)
+            Emp.EmplID = WBTools.getCellValueAt(EmployeesWorksheet, EmplIDCol, Row)
+            Emp.Name = WBTools.getCellValueAt(EmployeesWorksheet, NameCol, Row)
+            Emp.DeptID = WBTools.getCellValueAt(EmployeesWorksheet, DeptIDCol, Row)
+            Emp.JobCode = WBTools.getCellValueAt(EmployeesWorksheet, JobCodeCol, Row)
             
             For Index = 0 To 23
                 If Index Mod 2 = 0 Then
@@ -454,25 +454,25 @@ Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
                 
                 If PayPeriodCol(Index) > -1 Then
                     Emp.HoursWorked(PayPeriodString) = _
-                                                     WBTools.getCellValueAt(ws, PayPeriodCol(Index), Row)
+                                                     WBTools.getCellValueAt(EmployeesWorksheet, PayPeriodCol(Index), Row)
                 End If
             Next Index
             
-            If Not Emp Is Nothing Then EC.Add Emp
+            If Not Emp Is Nothing Then Employees.Add Emp
         End If
     Next Row
      
-    Set CreateEmployeeCollectionFromWorksheet_Hourly = EC
+    Set CreateEmployeeCollectionFromWorksheet_Hourly = Employees
 End Function
 
 Private Function CreateEmployeeCollectionFromWorksheet_Appointed( _
-        ByVal ws As Worksheet, _
+        ByVal AppointedWorksheet As Worksheet, _
         ByVal HeaderRow As Long _
         ) As EmployeeCollection
-    Dim EC As EmployeeCollection
+    Dim Employees As EmployeeCollection
     Dim Emp As Employee
     
-    Set EC = New EmployeeCollection
+    Set Employees = New EmployeeCollection
     ' Emp will be set in loop below
 
     Dim LastRow As Long
@@ -485,37 +485,37 @@ Private Function CreateEmployeeCollectionFromWorksheet_Appointed( _
 
     Dim Row As Long
 
-    LastRow = WBTools.FindLastRowInSheet(ws)
-    EmplIDCol = WBTools.FindColumnLikeName(ws, "*Empl*ID*")
-    NameCol = WBTools.FindColumnLikeName(ws, "Name*")
+    LastRow = WBTools.FindLastRowInSheet(AppointedWorksheet)
+    EmplIDCol = WBTools.FindColumnLikeName(AppointedWorksheet, "*Empl*ID*")
+    NameCol = WBTools.FindColumnLikeName(AppointedWorksheet, "Name*")
     DeptCol = 6
-    JobCodeCol = WBTools.FindColumnLikeName(ws, "*Job Code*")
-    CanceledClassCol = WBTools.FindColumnByName(ws, "Canceled Class")
-    PayPeriodCol = WBTools.FindColumnByName(ws, "Cntct hrs")
+    JobCodeCol = WBTools.FindColumnLikeName(AppointedWorksheet, "*Job Code*")
+    CanceledClassCol = WBTools.FindColumnByName(AppointedWorksheet, "Canceled Class")
+    PayPeriodCol = WBTools.FindColumnByName(AppointedWorksheet, "Cntct hrs")
     
     For Row = HeaderRow + 1 To LastRow
         Set Emp = New Employee
         
         ' Not empty, not canceled, and a number value (ignore Independent Study)
-        If WBTools.getCellValueAt(ws, EmplIDCol, Row) <> Empty _
-           And isEmpty(WBTools.getCellValueAt(ws, CanceledClassCol, Row)) _
+        If WBTools.getCellValueAt(AppointedWorksheet, EmplIDCol, Row) <> Empty _
+           And isEmpty(WBTools.getCellValueAt(AppointedWorksheet, CanceledClassCol, Row)) _
            And ( _
-           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 2 Or _
-           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 3 Or _
-           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 4 Or _
-           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 5 Or _
-           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 14 Or _
-           VarType(WBTools.getCellValueAt(ws, PayPeriodCol, Row)) = 20 _
+           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 2 Or _
+           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 3 Or _
+           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 4 Or _
+           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 5 Or _
+           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 14 Or _
+           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 20 _
            ) Then
-            Emp.EmplID = WBTools.getCellValueAt(ws, EmplIDCol, Row)
-            Emp.Name = WBTools.getCellValueAt(ws, NameCol, Row)
-            Emp.DeptID = WBTools.getCellValueAt(ws, DeptCol, Row)
-            Emp.JobCode = WBTools.getCellValueAt(ws, JobCodeCol, Row)
-            Emp.HoursWorked("OTH") = WBTools.getCellValueAt(ws, PayPeriodCol, Row)
+            Emp.EmplID = WBTools.getCellValueAt(AppointedWorksheet, EmplIDCol, Row)
+            Emp.Name = WBTools.getCellValueAt(AppointedWorksheet, NameCol, Row)
+            Emp.DeptID = WBTools.getCellValueAt(AppointedWorksheet, DeptCol, Row)
+            Emp.JobCode = WBTools.getCellValueAt(AppointedWorksheet, JobCodeCol, Row)
+            Emp.HoursWorked("OTH") = WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)
             
-            If Not Emp Is Nothing Then EC.Add Emp
+            If Not Emp Is Nothing Then Employees.Add Emp
         End If
     Next Row
      
-    Set CreateEmployeeCollectionFromWorksheet_Appointed = EC
+    Set CreateEmployeeCollectionFromWorksheet_Appointed = Employees
 End Function

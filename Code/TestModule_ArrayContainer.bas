@@ -47,13 +47,15 @@ Private Sub TestMethod_SetData()
     On Error GoTo TestFail
     
     'Arrange:
+    '@Ignore UseMeaningfulName
     Dim AC As ArrayContainer
+    '@Ignore UseMeaningfulName
     Dim DA(2, 3) As Variant
-    Dim c As Long
-    Dim r As Long
+    Dim ColumnIndex As Long
+    Dim RowIndex As Long
     
-    c = 3
-    r = 2
+    ColumnIndex = 3
+    RowIndex = 2
     
     Set AC = New ArrayContainer
     
@@ -71,7 +73,7 @@ Private Sub TestMethod_SetData()
     DA(2, 3) = "L"
     
     'Act:
-    AC.SetData r, c, DA
+    AC.SetData RowIndex, ColumnIndex, DA
     
     'Assert:
     Assert.IsTrue AC.Rows = 2

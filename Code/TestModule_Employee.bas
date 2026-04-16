@@ -539,16 +539,16 @@ Private Sub TestMethod_GetDeptID()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim E As Employee
-    Dim id As String
-    Set E = New Employee
-    E.DeptID = "12345"
+    Dim Emp As Employee
+    Dim DeptID As String
+    Set Emp = New Employee
+    Emp.DeptID = "12345"
     
     'Act:
-    id = E.DeptID
+    DeptID = Emp.DeptID
     
     'Assert:
-    Assert.IsTrue id = "12345"
+    Assert.IsTrue DeptID = "12345"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -565,17 +565,17 @@ Private Sub TestMethod_GetEmplID()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim E As Employee
-    Dim id As String
-    Set E = New Employee
-    E.EmplID = "12345"
+    Dim Emp As Employee
+    Dim EmplID As String
+    Set Emp = New Employee
+    Emp.EmplID = "12345"
     
     'Act:
     
-    id = E.EmplID
+    EmplID = Emp.EmplID
     
     'Assert:
-    Assert.IsTrue id = "12345"
+    Assert.IsTrue EmplID = "12345"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -592,17 +592,17 @@ Private Sub TestMethod_GetJobCode()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim E As Employee
-    Dim jc As String
-    Set E = New Employee
-    E.JobCode = "ABC"
+    Dim Emp As Employee
+    Dim JobCode As String
+    Set Emp = New Employee
+    Emp.JobCode = "ABC"
     
     'Act:
     
-    jc = E.JobCode
+    JobCode = Emp.JobCode
     
     'Assert:
-    Assert.IsTrue jc = "ABC"
+    Assert.IsTrue JobCode = "ABC"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -619,17 +619,17 @@ Private Sub TestMethod_GetName()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim E As Employee
-    Dim n As String
-    Set E = New Employee
-    E.Name = "Harry Haywood"
+    Dim Emp As Employee
+    Dim Name As String
+    Set Emp = New Employee
+    Emp.Name = "Harry Haywood"
     
     'Act:
     
-    n = E.Name
+    Name = Emp.Name
     
     'Assert:
-    Assert.IsTrue n = "Harry Haywood"
+    Assert.IsTrue Name = "Harry Haywood"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -646,14 +646,14 @@ Private Sub TestMethod_LetDeptID()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim E As Employee
-    Set E = New Employee
+    Dim Emp As Employee
+    Set Emp = New Employee
     
     'Act:
-    E.DeptID = "12345"
+    Emp.DeptID = "12345"
     
     'Assert:
-    Assert.IsTrue E.DeptID = "12345"
+    Assert.IsTrue Emp.DeptID = "12345"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -670,14 +670,14 @@ Private Sub TestMethod_LetEmplID()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim E As Employee
-    Set E = New Employee
+    Dim Emp As Employee
+    Set Emp = New Employee
     
     'Act:
-    E.EmplID = "123456789"
+    Emp.EmplID = "123456789"
     
     'Assert:
-    Assert.IsTrue E.EmplID = "123456789"
+    Assert.IsTrue Emp.EmplID = "123456789"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -694,14 +694,14 @@ Private Sub TestMethod_LetJobCode()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim E As Employee
-    Set E = New Employee
+    Dim Emp As Employee
+    Set Emp = New Employee
     
     'Act:
-    E.JobCode = "ABC"
+    Emp.JobCode = "ABC"
     
     'Assert:
-    Assert.IsTrue E.JobCode = "ABC"
+    Assert.IsTrue Emp.JobCode = "ABC"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -718,14 +718,14 @@ Private Sub TestMethod_LetName()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim E As Employee
-    Set E = New Employee
+    Dim Emp As Employee
+    Set Emp = New Employee
     
     'Act:
-    E.Name = "Rosa Luxemburg"
+    Emp.Name = "Rosa Luxemburg"
     
     'Assert:
-    Assert.IsTrue E.Name = "Rosa Luxemburg"
+    Assert.IsTrue Emp.Name = "Rosa Luxemburg"
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -763,14 +763,14 @@ Private Sub TestMethod_FTE_OTHeq10()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim E As Employee
-    Set E = New Employee
+    Dim Emp As Employee
+    Set Emp = New Employee
     Dim fte As Single
     
-    E.HoursWorked("OTH") = 10
+    Emp.HoursWorked("OTH") = 10
     
     'Act:
-    fte = E.fte()
+    fte = Emp.fte()
     
     'Assert:
     Assert.IsTrue fte = 5.05
@@ -790,12 +790,12 @@ Private Sub TestMethod_FTE_NoHours()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim E As Employee
-    Set E = New Employee
+    Dim Emp As Employee
+    Set Emp = New Employee
     Dim fte As Single
     
     'Act:
-    fte = E.fte()
+    fte = Emp.fte()
     
     'Assert:
     Assert.IsTrue fte = 0
