@@ -176,8 +176,9 @@ Public Function CountUniqueEmplIDs() As Long
     CountUniqueEmplIDs = UniqueEmplIDs
 End Function
 
-' Returns a dictionary with key=EmplID and val=count
+'@Description "Returns a dictionary with key=EmplID and val=count"
 Public Function UniqueEmplIDs() As Variant
+Attribute UniqueEmplIDs.VB_Description = "Returns a dictionary with key=EmplID and val=count"
     Dim EmplIDs As Variant
     Dim EmplID As String
     Dim Index As Long
@@ -196,8 +197,9 @@ Public Function UniqueEmplIDs() As Variant
     Set UniqueEmplIDs = EmplIDs
 End Function
 
-' Returns a dictionary with key=DeptID and val=count
+'@Description "Returns a dictionary with key=DeptID and val=count"
 Public Function UniqueDeptIDs() As Variant
+Attribute UniqueDeptIDs.VB_Description = "Returns a dictionary with key=DeptID and val=count"
     Dim DeptIDs As Variant
     Dim DeptID As String
     Dim Index As Long
@@ -216,8 +218,9 @@ Public Function UniqueDeptIDs() As Variant
     Set UniqueDeptIDs = DeptIDs
 End Function
 
-' Returns a dictionary with key=EmplID and val=count
+'@Description "Returns a dictionary with key=EmplID and val=count"
 Public Function UniqueJobCodes() As Variant
+Attribute UniqueJobCodes.VB_Description = "Returns a dictionary with key=EmplID and val=count"
     Dim JobCodes As Variant
     Dim JobCode As String
     Dim Index As Long
@@ -516,5 +519,3 @@ Private Function CreateEmployeeCollectionFromWorksheet_Appointed( _
      
     Set CreateEmployeeCollectionFromWorksheet_Appointed = EC
 End Function
-
-

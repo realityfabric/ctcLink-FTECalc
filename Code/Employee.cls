@@ -110,12 +110,13 @@ Public Function fte() As Single
     fte = Round(HoursWorked() * 100 / 198, 2)
 End Function
 
-' Returns Employee if success, Nothing if fail
+'@Description "Returns Employee if success, Nothing if fail"
 '@Ignore UseMeaningfulName
 Public Function Merge(ByVal Employee2 As Employee _
                       , Optional ByVal PreserveDeptID As Boolean = True _
                        , Optional ByVal PreserveJobCode As Boolean = True _
                         ) As Employee
+Attribute Merge.VB_Description = "Returns Employee if success, Nothing if fail"
     Dim MergedEmployee As Employee
     
     Set MergedEmployee = New Employee
@@ -150,5 +151,3 @@ Public Function Merge(ByVal Employee2 As Employee _
     
     Set Merge = MergedEmployee
 End Function
-
-

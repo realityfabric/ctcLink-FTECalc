@@ -163,6 +163,8 @@ Public Sub Main()
 
 End Sub
 
+'@Description "Return a LongLong representing the number of seconds since January 1, 1970."
 Public Function UnixTime() As LongLong
+Attribute UnixTime.VB_Description = "Return a LongLong representing the number of seconds since January 1, 1970."
     UnixTime = DateDiff("s", "1/1/1970 00:00:00", Now)
 End Function
