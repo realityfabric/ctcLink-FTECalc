@@ -2,38 +2,19 @@ Attribute VB_Name = "TestModule_ArrayContainer"
 '@TestModule
 '@Folder("Tests")
 
-
 Option Explicit
 Option Private Module
 
 Private Assert As Object
-'@Ignore VariableNotUsed
-Private Fakes As Object
 
 '@ModuleInitialize
 Private Sub ModuleInitialize()
-    'this method runs once per module.
     Set Assert = CreateObject("Rubberduck.AssertClass")
-    Set Fakes = CreateObject("Rubberduck.FakesProvider")
 End Sub
 
 '@ModuleCleanup
 Private Sub ModuleCleanup()
-    'this method runs once per module.
     Set Assert = Nothing
-    Set Fakes = Nothing
-End Sub
-
-'@TestInitialize
-'@Ignore EmptyMethod
-Private Sub TestInitialize()
-    'This method runs before every test in the module..
-End Sub
-
-'@TestCleanup
-'@Ignore EmptyMethod
-Private Sub TestCleanup()
-    'this method runs after every test in the module.
 End Sub
 
 '@TestMethod("Initialize")
@@ -91,7 +72,6 @@ Private Sub TestMethod_SetData()
     
     'Act:
     AC.SetData r, c, DA
-    
     
     'Assert:
     Assert.IsTrue AC.Rows = 2
