@@ -1,33 +1,598 @@
 Attribute VB_Name = "TestModule_EmployeeCollection"
+'@IgnoreModule EmptyMethod
 '@TestModule
 '@Folder("Tests")
+
+
 Option Explicit
 Option Private Module
 
 Private Assert As Object
+'@Ignore VariableNotUsed
+Private Fakes As Object
 
 '@ModuleInitialize
 Private Sub ModuleInitialize()
+    'this method runs once per module.
     Set Assert = CreateObject("Rubberduck.AssertClass")
+    Set Fakes = CreateObject("Rubberduck.FakesProvider")
 End Sub
 
 '@ModuleCleanup
 Private Sub ModuleCleanup()
+    'this method runs once per module.
     Set Assert = Nothing
+    Set Fakes = Nothing
 End Sub
 
-'@TestMethod("Uncategorized")
-Private Sub Test_Add()
+'@TestInitialize
+Private Sub TestInitialize()
+    'This method runs before every test in the module..
+End Sub
+
+'@TestCleanup
+Private Sub TestCleanup()
+    'this method runs after every test in the module.
+End Sub
+
+'TODO Test EmployeeCollection Initialization
+'TODO Test EmployeeCollection Add
+'TODO Test EmployeeCollection Remove
+'TODO Test EmployeeCollection Item
+'TODO Test EmployeeCollection Count
+'TODO Test EmployeeCollection Employees (Get)
+
+'@TestMethod("Getters")
+Private Sub Test_EmployeeEmployeesWithJobCode()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim Emp As Employee
-    Set Employees = New EmployeeCollection
-    Set Emp = New Employee
+    Dim EC As EmployeeCollection
+    Set EC = New EmployeeCollection
+    
+    Dim JohnDoe As Employee
+    Dim JaneDeer As Employee
+    Dim DonaldDuck As Employee
+    Dim DaisyDuck As Employee
+    Set JohnDoe = New Employee
+    Set JaneDeer = New Employee
+    Set DonaldDuck = New Employee
+    Set DaisyDuck = New Employee
+    
+    JohnDoe.Name = "John Doe"
+    JohnDoe.EmplID = "000000000"
+    JohnDoe.Department = "00000"
+    JohnDoe.JobCode = "TARGET"
+
+    JaneDeer.Name = "Jane Deer"
+    JaneDeer.EmplID = "111111111"
+    JaneDeer.Department = "00000"
+    JaneDeer.JobCode = "NOT_TARGET"
+    
+    DonaldDuck.Name = "Donald Duck"
+    DonaldDuck.EmplID = "222222222"
+    DonaldDuck.Department = "00000"
+    DonaldDuck.JobCode = "TARGET"
+    
+    DaisyDuck.Name = "DaisyDuck"
+    DaisyDuck.EmplID = "333333333"
+    DaisyDuck.Department = "00000"
+    DaisyDuck.JobCode = "NOT_TARGET"
+    
+    EC.Add JohnDoe, "TestModule_EmployeeCollection.Test_EmployeeEmployeesWithJobCode.Employees"
+    EC.Add JaneDeer, "TestModule_EmployeeCollection.Test_EmployeeEmployeesWithJobCode.Employees"
+    EC.Add DonaldDuck, "TestModule_EmployeeCollection.Test_EmployeeEmployeesWithJobCode.Employees"
+    EC.Add DaisyDuck, "TestModule_EmployeeCollection.Test_EmployeeEmployeesWithJobCode.Employees"
     
     'Act:
-    Employees.Add Emp
+    Dim EC_Subset As EmployeeCollection
+    Set EC_Subset = EC.EmployeesWithJobCode("TARGET")
+    
+    Dim HasKeyJohnDoe As Boolean
+    Dim HasKeyJaneDeer As Boolean
+    Dim HasKeyDonaldDuck As Boolean
+    Dim HasKeyDaisyDuck As Boolean
+    
+    HasKeyJohnDoe = EC_Subset.HasKey(JohnDoe.eKey)
+    HasKeyJaneDeer = EC_Subset.HasKey(JaneDeer.eKey)
+    HasKeyDonaldDuck = EC_Subset.HasKey(DonaldDuck.eKey)
+    HasKeyDaisyDuck = EC_Subset.HasKey(DaisyDuck.eKey)
+    
+    'Assert:
+    Assert.IsTrue HasKeyJohnDoe
+    Assert.IsFalse HasKeyJaneDeer
+    Assert.IsTrue HasKeyDonaldDuck
+    Assert.IsFalse HasKeyDaisyDuck
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("Getters")
+Private Sub Test_EmployeeEmployeesWithDepartment()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC As EmployeeCollection
+    Set EC = New EmployeeCollection
+    
+    Dim JohnDoe As Employee
+    Dim JaneDeer As Employee
+    Dim DonaldDuck As Employee
+    Dim DaisyDuck As Employee
+    Set JohnDoe = New Employee
+    Set JaneDeer = New Employee
+    Set DonaldDuck = New Employee
+    Set DaisyDuck = New Employee
+    
+    JohnDoe.Name = "John Doe"
+    JohnDoe.EmplID = "000000000"
+    JohnDoe.Department = "TARGET"
+    JohnDoe.JobCode = "AAA"
+
+    JaneDeer.Name = "Jane Deer"
+    JaneDeer.EmplID = "111111111"
+    JaneDeer.Department = "NOT_TARGET"
+    JaneDeer.JobCode = "AAA"
+    
+    DonaldDuck.Name = "Donald Duck"
+    DonaldDuck.EmplID = "222222222"
+    DonaldDuck.Department = "TARGET"
+    DonaldDuck.JobCode = "AAA"
+    
+    DaisyDuck.Name = "DaisyDuck"
+    DaisyDuck.EmplID = "333333333"
+    DaisyDuck.Department = "NOT_TARGET"
+    DaisyDuck.JobCode = "AAA"
+    
+    EC.Add JohnDoe, "TestModule_EmployeeCollection.Test_EmployeeEmployeesWithDepartment.Employees"
+    EC.Add JaneDeer, "TestModule_EmployeeCollection.Test_EmployeeEmployeesWithDepartment.Employees"
+    EC.Add DonaldDuck, "TestModule_EmployeeCollection.Test_EmployeeEmployeesWithDepartment.Employees"
+    EC.Add DaisyDuck, "TestModule_EmployeeCollection.Test_EmployeeEmployeesWithDepartment.Employees"
+    
+    'Act:
+    Dim EC_Subset As EmployeeCollection
+    Set EC_Subset = EC.EmployeesWithDepartment("TARGET")
+    
+    Dim HasKeyJohnDoe As Boolean
+    Dim HasKeyJaneDeer As Boolean
+    Dim HasKeyDonaldDuck As Boolean
+    Dim HasKeyDaisyDuck As Boolean
+    
+    HasKeyJohnDoe = EC_Subset.HasKey(JohnDoe.eKey)
+    HasKeyJaneDeer = EC_Subset.HasKey(JaneDeer.eKey)
+    HasKeyDonaldDuck = EC_Subset.HasKey(DonaldDuck.eKey)
+    HasKeyDaisyDuck = EC_Subset.HasKey(DaisyDuck.eKey)
+    
+    'Assert:
+    Assert.IsTrue HasKeyJohnDoe
+    Assert.IsFalse HasKeyJaneDeer
+    Assert.IsTrue HasKeyDonaldDuck
+    Assert.IsFalse HasKeyDaisyDuck
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'TODO Test EmployeeCollection GetItemsWithDepartment
+'TODO Test EmployeeCollection GetItemsWithEmplID
+
+'@TestMethod("Booleans")
+Private Sub Test_EmployeeCollectionHasKeyTrue()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC As EmployeeCollection
+    Set EC = New EmployeeCollection
+    
+    Dim Emp As Employee
+    Set Emp = New Employee
+    EC.Add Emp
+    
+    Dim HasKey As Boolean
+    
+    'Act:
+    HasKey = EC.HasKey(Emp.eKey)
+    
+    'Assert:
+    Assert.IsTrue HasKey
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("Booleans")
+Private Sub Test_EmployeeCollectionHasKeyFalse()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC As EmployeeCollection
+    Set EC = New EmployeeCollection
+    
+    Dim Emp As Employee
+    Set Emp = New Employee
+    
+    Dim HasKey As Boolean
+    
+    'Act:
+    HasKey = EC.HasKey(Emp.eKey)
+    
+    'Assert:
+    Assert.IsFalse HasKey
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC_A As EmployeeCollection
+    Dim EC_B As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    
+    Set EC_A = New EmployeeCollection
+    Set EC_B = New EmployeeCollection
+    
+    Dim John As Employee
+    Dim Jane As Employee
+    Dim Donald As Employee
+    Dim Daisy As Employee
+    
+    Set John = New Employee
+    Set Jane = New Employee
+    Set Donald = New Employee
+    Set Daisy = New Employee
+    
+    John.EmplID = "000000000"
+    Jane.EmplID = "111111111"
+    Donald.EmplID = "222222222"
+    Daisy.EmplID = "333333333"
+    
+    John.Name = "John"
+    Jane.Name = "Jane"
+    Donald.Name = "Donald"
+    Daisy.Name = "Daisy"
+    
+    John.Department = "AAAAA"
+    Jane.Department = "BBBBB"
+    Donald.Department = "CCCCC"
+    Daisy.Department = "DDDDD"
+    
+    John.JobCode = "!!!"
+    Jane.JobCode = "@@@"
+    Donald.JobCode = "###"
+    Daisy.JobCode = "$$$"
+    
+    EC_A.Add John, "EmployeesA"
+    EC_A.Add Jane, "EmployeesA"
+    EC_B.Add Donald, "EmployeesB"
+    EC_B.Add Daisy, "EmployeesB"
+    
+    'Act:
+    Set EC_Combined = EC_A.Combine(EC_B)
+    
+    'Assert:
+    Assert.IsTrue EC_Combined.HasKey("000000000*AAAAA*!!!")
+    Assert.IsTrue EC_Combined.HasKey("111111111*BBBBB*@@@")
+    Assert.IsTrue EC_Combined.HasKey("222222222*CCCCC*###")
+    Assert.IsTrue EC_Combined.HasKey("333333333*DDDDD*$$$")
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'TODO Test EmployeeCollection MergeDuplicateEmployeesOnDepartment
+'TODO Test EmployeeCollection MergeDuplicateEmployeesOnJobCode
+'TODO Test EmployeeCollection PruneEmployeesToJobCodeList
+
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeesWithJobCodeSameJobCodeSameDepartment()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC As EmployeeCollection
+    Dim EC_Merged As EmployeeCollection
+    Dim Emp(1 To 24) As Employee
+    Dim Index As Long
+    
+    Set EC = New EmployeeCollection
+    
+    For Index = 1 To 24
+        Set Emp(Index) = New Employee
+    Next
+    
+    Emp(1).Name = "Jan A"
+    Emp(2).Name = "Jan B"
+    Emp(3).Name = "Feb A"
+    Emp(4).Name = "Feb B"
+    Emp(5).Name = "Mar A"
+    Emp(6).Name = "Mar B"
+    Emp(7).Name = "Apr A"
+    Emp(8).Name = "Apr B"
+    Emp(9).Name = "May A"
+    Emp(10).Name = "May B"
+    Emp(11).Name = "Jun A"
+    Emp(12).Name = "Jun B"
+    Emp(13).Name = "Jul A"
+    Emp(14).Name = "Jul B"
+    Emp(15).Name = "Aug A"
+    Emp(16).Name = "Aug B"
+    Emp(17).Name = "Sep A"
+    Emp(18).Name = "Sep B"
+    Emp(19).Name = "Oct A"
+    Emp(20).Name = "Oct B"
+    Emp(21).Name = "Nov A"
+    Emp(22).Name = "Nov B"
+    Emp(23).Name = "Dec A"
+    Emp(24).Name = "Dec B"
+    
+    For Index = 1 To 24
+        Emp(Index).EmplID = Index
+        Emp(Index).JobCode = "JOB"
+        Emp(Index).Department = "DEPRT"
+    Next
+    
+    Emp(1).hoursWorked("01A") = 10
+    Emp(2).hoursWorked("01B") = 10
+    Emp(3).hoursWorked("02A") = 10
+    Emp(4).hoursWorked("02B") = 10
+    Emp(5).hoursWorked("03A") = 10
+    Emp(6).hoursWorked("03B") = 10
+    Emp(7).hoursWorked("04A") = 10
+    Emp(8).hoursWorked("04B") = 10
+    Emp(9).hoursWorked("05A") = 10
+    Emp(10).hoursWorked("05B") = 10
+    Emp(11).hoursWorked("06A") = 10
+    Emp(12).hoursWorked("06B") = 10
+    Emp(13).hoursWorked("07A") = 10
+    Emp(14).hoursWorked("07B") = 10
+    Emp(15).hoursWorked("08A") = 10
+    Emp(16).hoursWorked("08B") = 10
+    Emp(17).hoursWorked("09A") = 10
+    Emp(18).hoursWorked("09B") = 10
+    Emp(19).hoursWorked("10A") = 10
+    Emp(20).hoursWorked("10B") = 10
+    Emp(21).hoursWorked("11A") = 10
+    Emp(22).hoursWorked("11B") = 10
+    Emp(23).hoursWorked("12A") = 10
+    Emp(24).hoursWorked("12B") = 10
+    
+    For Index = 1 To 24
+        EC.Add Emp(Index)
+    Next
+    
+    'Act:
+    
+    Set EC_Merged = EC.EmployeesWithJobCode("JOB")
+    
+    'Assert:
+    
+    For Index = 1 To 24
+        Assert.IsTrue EC_Merged.Item(Index).hoursWorked = 10
+    Next
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("Uncategorized")
+Private Sub Test_MergeEmployeesWithJobCodeSameJobCodeSameDepartment()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC As EmployeeCollection
+    Dim EC_withJobCode As EmployeeCollection
+    Dim EC_Merged As EmployeeCollection
+    Dim Emp(1 To 24) As Employee
+    Dim Index As Long
+    
+    Set EC = New EmployeeCollection
+    
+    For Index = 1 To 24
+        Set Emp(Index) = New Employee
+    Next
+    
+    Emp(1).Name = "Jan A"
+    Emp(2).Name = "Jan B"
+    Emp(3).Name = "Feb A"
+    Emp(4).Name = "Feb B"
+    Emp(5).Name = "Mar A"
+    Emp(6).Name = "Mar B"
+    Emp(7).Name = "Apr A"
+    Emp(8).Name = "Apr B"
+    Emp(9).Name = "May A"
+    Emp(10).Name = "May B"
+    Emp(11).Name = "Jun A"
+    Emp(12).Name = "Jun B"
+    Emp(13).Name = "Jul A"
+    Emp(14).Name = "Jul B"
+    Emp(15).Name = "Aug A"
+    Emp(16).Name = "Aug B"
+    Emp(17).Name = "Sep A"
+    Emp(18).Name = "Sep B"
+    Emp(19).Name = "Oct A"
+    Emp(20).Name = "Oct B"
+    Emp(21).Name = "Nov A"
+    Emp(22).Name = "Nov B"
+    Emp(23).Name = "Dec A"
+    Emp(24).Name = "Dec B"
+    
+    For Index = 1 To 24
+        Emp(Index).EmplID = Index
+        Emp(Index).JobCode = "JOB"
+        Emp(Index).Department = "DEPRT"
+    Next
+    
+    Emp(1).hoursWorked("01A") = 10
+    Emp(2).hoursWorked("01B") = 10
+    Emp(3).hoursWorked("02A") = 10
+    Emp(4).hoursWorked("02B") = 10
+    Emp(5).hoursWorked("03A") = 10
+    Emp(6).hoursWorked("03B") = 10
+    Emp(7).hoursWorked("04A") = 10
+    Emp(8).hoursWorked("04B") = 10
+    Emp(9).hoursWorked("05A") = 10
+    Emp(10).hoursWorked("05B") = 10
+    Emp(11).hoursWorked("06A") = 10
+    Emp(12).hoursWorked("06B") = 10
+    Emp(13).hoursWorked("07A") = 10
+    Emp(14).hoursWorked("07B") = 10
+    Emp(15).hoursWorked("08A") = 10
+    Emp(16).hoursWorked("08B") = 10
+    Emp(17).hoursWorked("09A") = 10
+    Emp(18).hoursWorked("09B") = 10
+    Emp(19).hoursWorked("10A") = 10
+    Emp(20).hoursWorked("10B") = 10
+    Emp(21).hoursWorked("11A") = 10
+    Emp(22).hoursWorked("11B") = 10
+    Emp(23).hoursWorked("12A") = 10
+    Emp(24).hoursWorked("12B") = 10
+    
+    For Index = 1 To 24
+        EC.Add Emp(Index)
+    Next
+    
+    'Act:
+    
+    Set EC_withJobCode = EC.EmployeesWithJobCode("JOB")
+    Set EC_Merged = EC_withJobCode.MergeDuplicateEmployeesOnJobCode()
+    
+    'Assert:
+    
+    For Index = 1 To 24
+        Assert.IsTrue EC_Merged.Item(Index).hoursWorked = 10
+        Assert.IsTrue EC_Merged.Item(Index).Name = Emp(Index).Name
+    Next
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("Uncategorized")
+Private Sub Test_Copy_RunWithoutErrors()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC As EmployeeCollection
+    '@Ignore VariableNotUsed
+    Dim ECCopy As EmployeeCollection
+    Dim Emp(1 To 24) As Employee
+    Dim Index As Long
+    
+    Set EC = New EmployeeCollection
+    
+    For Index = 1 To 24
+        Set Emp(Index) = New Employee
+    Next
+    
+    Emp(1).Name = "Jan A"
+    Emp(2).Name = "Jan B"
+    Emp(3).Name = "Feb A"
+    Emp(4).Name = "Feb B"
+    Emp(5).Name = "Mar A"
+    Emp(6).Name = "Mar B"
+    Emp(7).Name = "Apr A"
+    Emp(8).Name = "Apr B"
+    Emp(9).Name = "May A"
+    Emp(10).Name = "May B"
+    Emp(11).Name = "Jun A"
+    Emp(12).Name = "Jun B"
+    Emp(13).Name = "Jul A"
+    Emp(14).Name = "Jul B"
+    Emp(15).Name = "Aug A"
+    Emp(16).Name = "Aug B"
+    Emp(17).Name = "Sep A"
+    Emp(18).Name = "Sep B"
+    Emp(19).Name = "Oct A"
+    Emp(20).Name = "Oct B"
+    Emp(21).Name = "Nov A"
+    Emp(22).Name = "Nov B"
+    Emp(23).Name = "Dec A"
+    Emp(24).Name = "Dec B"
+    
+    For Index = 1 To 24
+        Emp(Index).EmplID = Index
+        Emp(Index).JobCode = "JOB"
+        Emp(Index).Department = "DEPRT"
+    Next
+    
+    Emp(1).hoursWorked("01A") = 10
+    Emp(2).hoursWorked("01B") = 10
+    Emp(3).hoursWorked("02A") = 10
+    Emp(4).hoursWorked("02B") = 10
+    Emp(5).hoursWorked("03A") = 10
+    Emp(6).hoursWorked("03B") = 10
+    Emp(7).hoursWorked("04A") = 10
+    Emp(8).hoursWorked("04B") = 10
+    Emp(9).hoursWorked("05A") = 10
+    Emp(10).hoursWorked("05B") = 10
+    Emp(11).hoursWorked("06A") = 10
+    Emp(12).hoursWorked("06B") = 10
+    Emp(13).hoursWorked("07A") = 10
+    Emp(14).hoursWorked("07B") = 10
+    Emp(15).hoursWorked("08A") = 10
+    Emp(16).hoursWorked("08B") = 10
+    Emp(17).hoursWorked("09A") = 10
+    Emp(18).hoursWorked("09B") = 10
+    Emp(19).hoursWorked("10A") = 10
+    Emp(20).hoursWorked("10B") = 10
+    Emp(21).hoursWorked("11A") = 10
+    Emp(22).hoursWorked("11B") = 10
+    Emp(23).hoursWorked("12A") = 10
+    Emp(24).hoursWorked("12B") = 10
+    
+    For Index = 1 To 24
+        EC.Add Emp(Index)
+    Next
+    
+    'Act:
+    '@Ignore AssignmentNotUsed
+    Set ECCopy = EC.Copy()
     
     'Assert:
     Assert.Succeed
@@ -43,412 +608,87 @@ TestFail:
 End Sub
 
 '@TestMethod("Uncategorized")
-Private Sub Test_Remove()
+Private Sub Test_Copy_AssertAreNotSame()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim Emp As Employee
-    Set Employees = New EmployeeCollection
-    Set Emp = New Employee
-    Employees.Add Emp
-    
-    'Act:
-    Employees.Remove (1)
-    
-    'Assert:
-    Assert.Succeed
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_Count_Empty()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim Employees As EmployeeCollection
-    Set Employees = New EmployeeCollection
-    
-    'Act:
-    ' No Actions to take
-    
-    'Assert:
-    Assert.IsTrue Employees.Count() = 0
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_Count_One()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim Emp As Employee
-    Set Employees = New EmployeeCollection
-    Set Emp = New Employee
-    
-    'Act:
-    Employees.Add Emp
-    
-    'Assert:
-    Assert.IsTrue Employees.Count() = 1
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_Add_Remove_Count_Empty()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim Emp As Employee
-    Set Employees = New EmployeeCollection
-    Set Emp = New Employee
-    
-    'Act:
-    Employees.Add Emp
-    Employees.Remove 1
-    
-    'Assert:
-    Assert.IsTrue Employees.Count() = 0
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_Concat()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim Employees_A As EmployeeCollection
-    Dim Employees_B As EmployeeCollection
-    Dim Emp_A As Employee
-    Dim Emp_B As Employee
-    Set Employees_A = New EmployeeCollection
-    Set Employees_B = New EmployeeCollection
-    Set Emp_A = New Employee
-    Set Emp_B = New Employee
-    Employees_A.Add Emp_A
-    Employees_B.Add Emp_B
-    
-    'Act:
-    Employees_A.Concat Employees_B
-    
-    'Assert:
-    Assert.IsTrue Employees_A.Count() = 2
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_Filter_EmplID()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim Filtered_EC As EmployeeCollection
-    Dim Emps(5) As Employee
+    Dim EC As EmployeeCollection
+    Dim ECCopy As EmployeeCollection
+    Dim Emp(1 To 24) As Employee
     Dim Index As Long
     
-    Set Employees = New EmployeeCollection
-    For Index = 0 To 4
-        Set Emps(Index) = New Employee
-    Next Index
+    Set EC = New EmployeeCollection
     
-    Emps(0).EmplID = "FILTER"
-    Emps(0).Name = "Emp 0"
-    Emps(0).DeptID = "0"
-    Emps(0).JobCode = "0"
-    
-    Emps(1).EmplID = "FILTER"
-    Emps(1).Name = "Emp 1"
-    Emps(1).DeptID = "1"
-    Emps(1).JobCode = "1"
-    
-    Emps(2).EmplID = "2"
-    Emps(2).Name = "Emp 2"
-    Emps(2).DeptID = "2"
-    Emps(2).JobCode = "2"
-    
-    Emps(3).EmplID = "3"
-    Emps(3).Name = "Emp 3"
-    Emps(3).DeptID = "3"
-    Emps(3).JobCode = "3"
-    
-    Emps(4).EmplID = "4"
-    Emps(4).Name = "Emp 4"
-    Emps(4).DeptID = "4"
-    Emps(4).JobCode = "4"
-    
-    For Index = 0 To 4
-        Employees.Add Emps(Index)
-    Next Index
-    
-    'Act:
-    Set Filtered_EC = Employees.Filter(EmplIDFilter:="FILTER")
-    
-    'Assert:
-    Assert.IsTrue Filtered_EC.Item(1).EmplID = "FILTER"
-    Assert.IsTrue Filtered_EC.Item(1).Name = "Emp 0"
-    Assert.IsTrue Filtered_EC.Item(2).EmplID = "FILTER"
-    Assert.IsTrue Filtered_EC.Item(2).Name = "Emp 1"
-    Assert.IsTrue Filtered_EC.Count = 2
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_Filter_DeptID()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim Filtered_EC As EmployeeCollection
-    Dim Emps(5) As Employee
-    Dim Index As Long
-    
-    Set Employees = New EmployeeCollection
-    For Index = 0 To 4
-        Set Emps(Index) = New Employee
-    Next Index
-    
-    Emps(0).EmplID = "0"
-    Emps(0).Name = "Emp 0"
-    Emps(0).DeptID = "FILTER"
-    Emps(0).JobCode = "0"
-    
-    Emps(1).EmplID = "1"
-    Emps(1).Name = "Emp 1"
-    Emps(1).DeptID = "FILTER"
-    Emps(1).JobCode = "1"
-    
-    Emps(2).EmplID = "2"
-    Emps(2).Name = "Emp 2"
-    Emps(2).DeptID = "2"
-    Emps(2).JobCode = "2"
-    
-    Emps(3).EmplID = "3"
-    Emps(3).Name = "Emp 3"
-    Emps(3).DeptID = "3"
-    Emps(3).JobCode = "3"
-    
-    Emps(4).EmplID = "4"
-    Emps(4).Name = "Emp 4"
-    Emps(4).DeptID = "4"
-    Emps(4).JobCode = "4"
-    
-    For Index = 0 To 4
-        Employees.Add Emps(Index)
-    Next Index
-    
-    'Act:
-    Set Filtered_EC = Employees.Filter(DeptIDFilter:="FILTER")
-    
-    'Assert:
-    Assert.IsTrue Filtered_EC.Item(1).DeptID = "FILTER"
-    Assert.IsTrue Filtered_EC.Item(1).Name = "Emp 0"
-    Assert.IsTrue Filtered_EC.Item(2).DeptID = "FILTER"
-    Assert.IsTrue Filtered_EC.Item(2).Name = "Emp 1"
-    Assert.IsTrue Filtered_EC.Count = 2
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_Filter_JobCode()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim Filtered_EC As EmployeeCollection
-    Dim Emps(5) As Employee
-    Dim Index As Long
-    
-    Set Employees = New EmployeeCollection
-    For Index = 0 To 4
-        Set Emps(Index) = New Employee
-    Next Index
-    
-    Emps(0).EmplID = "0"
-    Emps(0).Name = "Emp 0"
-    Emps(0).DeptID = "0"
-    Emps(0).JobCode = "FILTER"
-    
-    Emps(1).EmplID = "1"
-    Emps(1).Name = "Emp 1"
-    Emps(1).DeptID = "1"
-    Emps(1).JobCode = "FILTER"
-    
-    Emps(2).EmplID = "2"
-    Emps(2).Name = "Emp 2"
-    Emps(2).DeptID = "2"
-    Emps(2).JobCode = "2"
-    
-    Emps(3).EmplID = "3"
-    Emps(3).Name = "Emp 3"
-    Emps(3).DeptID = "3"
-    Emps(3).JobCode = "3"
-    
-    Emps(4).EmplID = "4"
-    Emps(4).Name = "Emp 4"
-    Emps(4).DeptID = "4"
-    Emps(4).JobCode = "4"
-    
-    For Index = 0 To 4
-        Employees.Add Emps(Index)
-    Next Index
-    
-    'Act:
-    Set Filtered_EC = Employees.Filter(JobCodeFilter:="FILTER")
-    
-    'Assert:
-    Assert.IsTrue Filtered_EC.Item(1).JobCode = "FILTER"
-    Assert.IsTrue Filtered_EC.Item(1).Name = "Emp 0"
-    Assert.IsTrue Filtered_EC.Item(2).JobCode = "FILTER"
-    Assert.IsTrue Filtered_EC.Item(2).Name = "Emp 1"
-    Assert.IsTrue Filtered_EC.Count = 2
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_ToArrayContainer()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim EmployeeArray As ArrayContainer
-    Dim Employees As EmployeeCollection
-    Dim Emp(1 To 5) As Employee
-    Dim Names(1 To 5) As String
-    Dim Index As Long
-    Dim Data As Variant
-    
-    Set Employees = New EmployeeCollection
-    
-    Names(1) = "Abby"
-    Names(2) = "Brenda"
-    Names(3) = "Chelsea"
-    Names(4) = "Dorothy"
-    Names(5) = "Ericka"
-    
-    For Index = 1 To 5
+    For Index = 1 To 24
         Set Emp(Index) = New Employee
-        Emp(Index).EmplID = Trim$(Str$(Index * 1000))
-        Emp(Index).Name = Names(Index)
-        Emp(Index).DeptID = Trim$(Str$(111 * Index))
-        Emp(Index).JobCode = Trim$(Str$(Index))
-        Emp(Index).HoursWorked("OTH") = Index * 5
-        
-        Employees.Add Emp(Index)
-    Next Index
+    Next
+    
+    Emp(1).Name = "Jan A"
+    Emp(2).Name = "Jan B"
+    Emp(3).Name = "Feb A"
+    Emp(4).Name = "Feb B"
+    Emp(5).Name = "Mar A"
+    Emp(6).Name = "Mar B"
+    Emp(7).Name = "Apr A"
+    Emp(8).Name = "Apr B"
+    Emp(9).Name = "May A"
+    Emp(10).Name = "May B"
+    Emp(11).Name = "Jun A"
+    Emp(12).Name = "Jun B"
+    Emp(13).Name = "Jul A"
+    Emp(14).Name = "Jul B"
+    Emp(15).Name = "Aug A"
+    Emp(16).Name = "Aug B"
+    Emp(17).Name = "Sep A"
+    Emp(18).Name = "Sep B"
+    Emp(19).Name = "Oct A"
+    Emp(20).Name = "Oct B"
+    Emp(21).Name = "Nov A"
+    Emp(22).Name = "Nov B"
+    Emp(23).Name = "Dec A"
+    Emp(24).Name = "Dec B"
+    
+    For Index = 1 To 24
+        Emp(Index).EmplID = Index
+        Emp(Index).JobCode = "JOB"
+        Emp(Index).Department = "DEPRT"
+    Next
+    
+    Emp(1).hoursWorked("01A") = 10
+    Emp(2).hoursWorked("01B") = 10
+    Emp(3).hoursWorked("02A") = 10
+    Emp(4).hoursWorked("02B") = 10
+    Emp(5).hoursWorked("03A") = 10
+    Emp(6).hoursWorked("03B") = 10
+    Emp(7).hoursWorked("04A") = 10
+    Emp(8).hoursWorked("04B") = 10
+    Emp(9).hoursWorked("05A") = 10
+    Emp(10).hoursWorked("05B") = 10
+    Emp(11).hoursWorked("06A") = 10
+    Emp(12).hoursWorked("06B") = 10
+    Emp(13).hoursWorked("07A") = 10
+    Emp(14).hoursWorked("07B") = 10
+    Emp(15).hoursWorked("08A") = 10
+    Emp(16).hoursWorked("08B") = 10
+    Emp(17).hoursWorked("09A") = 10
+    Emp(18).hoursWorked("09B") = 10
+    Emp(19).hoursWorked("10A") = 10
+    Emp(20).hoursWorked("10B") = 10
+    Emp(21).hoursWorked("11A") = 10
+    Emp(22).hoursWorked("11B") = 10
+    Emp(23).hoursWorked("12A") = 10
+    Emp(24).hoursWorked("12B") = 10
+    
+    For Index = 1 To 24
+        EC.Add Emp(Index)
+    Next
     
     'Act:
-    Set EmployeeArray = Employees.ToArrayContainer()
-    Data = EmployeeArray.Data
+    Set ECCopy = EC.Copy()
     
     'Assert:
-    Assert.IsTrue EmployeeArray.Rows = Employees.Count + 1         ' Count + Headers
-    Assert.IsTrue Data(0, 0) = "EmplID"
-    Assert.IsTrue Data(0, 1) = "Name"
-    Assert.IsTrue Data(0, 2) = "DeptID"
-    Assert.IsTrue Data(0, 3) = "JobCode"
-    Assert.IsTrue Data(0, 4) = "Hours"
-    Assert.IsTrue Data(0, 5) = "FTE%"
-    
-    Assert.IsTrue Data(1, 0) = "1000"
-    Assert.IsTrue Data(1, 1) = Names(1)
-    Assert.IsTrue Data(1, 2) = "111"
-    Assert.IsTrue Data(1, 3) = "1"
-    Assert.IsTrue Data(1, 4) = 5
-    Assert.IsTrue Data(1, 5) = Round(5 * 100 / 198, 2)
-    
-    Assert.IsTrue Data(2, 0) = "2000"
-    Assert.IsTrue Data(2, 1) = Names(2)
-    Assert.IsTrue Data(2, 2) = "222"
-    Assert.IsTrue Data(2, 3) = "2"
-    Assert.IsTrue Data(2, 4) = 10
-    Assert.IsTrue Data(2, 5) = Round(10 * 100 / 198, 2)
-    
-    Assert.IsTrue Data(3, 0) = "3000"
-    Assert.IsTrue Data(3, 1) = Names(3)
-    Assert.IsTrue Data(3, 2) = "333"
-    Assert.IsTrue Data(3, 3) = "3"
-    Assert.IsTrue Data(3, 4) = 15
-    Assert.IsTrue Data(3, 5) = Round(15 * 100 / 198, 2)
-    
-    Assert.IsTrue Data(4, 0) = "4000"
-    Assert.IsTrue Data(4, 1) = Names(4)
-    Assert.IsTrue Data(4, 2) = "444"
-    Assert.IsTrue Data(4, 3) = "4"
-    Assert.IsTrue Data(4, 4) = 20
-    Assert.IsTrue Data(4, 5) = Round(20 * 100 / 198, 2)
+    Assert.AreNotSame EC, ECCopy
 
-    Assert.IsTrue Data(5, 0) = "5000"
-    Assert.IsTrue Data(5, 1) = Names(5)
-    Assert.IsTrue Data(5, 2) = "555"
-    Assert.IsTrue Data(5, 3) = "5"
-    Assert.IsTrue Data(5, 4) = 25
-    Assert.IsTrue Data(5, 5) = Round(25 * 100 / 198, 2)
-    
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
     On Error Resume Next
@@ -460,241 +700,68 @@ TestFail:
 End Sub
 
 '@TestMethod("Uncategorized")
-Private Sub Test_ToArrayContainer_EmplID()
+Private Sub Test_Combine_UniqueEmps()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim EmployeeArray As ArrayContainer
-    Dim Employees As EmployeeCollection
-    Dim Emp(1 To 5) As Employee
-    Dim Names(1 To 5) As String
-    Dim Index As Long
-    Dim Data As Variant
-    
-    Set Employees = New EmployeeCollection
-    
-    Names(1) = "Abby"
-    Names(2) = "Brenda"
-    Names(3) = "Chelsea"
-    Names(4) = "Dorothy"
-    Names(5) = "Ericka"
-    
-    For Index = 1 To 5
-        Set Emp(Index) = New Employee
-        Emp(Index).EmplID = Trim$(Str$(Index * 1000))
-        Emp(Index).Name = Names(Index)
-        Emp(Index).DeptID = Trim$(Str$(111 * Index))
-        Emp(Index).JobCode = Trim$(Str$(Index))
-        Emp(Index).HoursWorked("OTH") = Index * 5
-        
-        Employees.Add Emp(Index)
-    Next Index
-    
-    'Act:
-    Set EmployeeArray = Employees.ToArrayContainer()
-    
-    Data = EmployeeArray.Data
-    
-    'Assert:
-    Assert.IsTrue Data(0, 0) = "EmplID"
-    Assert.IsTrue Data(1, 0) = "1000"
-    Assert.IsTrue Data(2, 0) = "2000"
-    Assert.IsTrue Data(3, 0) = "3000"
-    Assert.IsTrue Data(4, 0) = "4000"
-    Assert.IsTrue Data(5, 0) = "5000"
-    
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_CountUniqueEmplIDs_NoEmployees()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim Employees As EmployeeCollection
-    Set Employees = New EmployeeCollection
-    
-    'Act:
-    ' No Actions to Take
-    
-    'Assert:
-    Assert.IsTrue Employees.CountUniqueEmplIDs = 0
-    
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_CountUniqueEmplIDs_OneEmployees()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim Emp As Employee
-    Set Employees = New EmployeeCollection
-    Set Emp = New Employee
-    
-    Emp.EmplID = "111"
-    Employees.Add Emp
-    
-    'Act:
-    ' No Actions to Take
-    
-    'Assert:
-    Assert.IsTrue Employees.CountUniqueEmplIDs = 1
-    
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_CountUniqueEmplIDs_TwoEmployees_TwoUniqueEmployees()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim EmpArray(1 To 2) As Employee
-    Set Employees = New EmployeeCollection
-    Set EmpArray(1) = New Employee
-    Set EmpArray(2) = New Employee
-    
-    EmpArray(1).EmplID = "111"
-    EmpArray(2).EmplID = "222"
-    Employees.Add EmpArray(1)
-    Employees.Add EmpArray(2)
-    
-    'Act:
-    ' No Actions to Take
-    
-    'Assert:
-    Assert.IsTrue Employees.CountUniqueEmplIDs = 2
-    
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Uncategorized")
-Private Sub Test_CountUniqueEmplIDs_TwoEmployees_OneUniqueEmployees()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim EmpArray(1 To 2) As Employee
-    Set EmpCollection = New EmployeeCollection
-    Set EmpArray(1) = New Employee
-    Set EmpArray(2) = New Employee
-    
-    EmpArray(1).EmplID = "111"
-    EmpArray(2).EmplID = "111"
-    EmpCollection.Add EmpArray(1)
-    EmpCollection.Add EmpArray(2)
-    
-    'Act:
-    ' No Actions to Take
-    
-    'Assert:
-    Assert.IsTrue EmpCollection.CountUniqueEmplIDs = 1
-    
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Merge")
-Private Sub Test_MergeAllEmployeesOnEmplID_UniqueEmployees()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim EmpArray(1 To 10) As Employee
     Dim Index As Long
     
-    Set EmpCollection = New EmployeeCollection
-    For Index = 1 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = Trim$(Str$(Index))
-        EmpArray(Index).DeptID = "1"
-        EmpArray(Index).JobCode = "1"
-        EmpArray(Index).HoursWorked("01A") = 1
-        EmpCollection.Add EmpArray(Index)
-    Next Index
-    
-    'Act:
-    
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployeesOnEmplID()
-    
-    'Assert:
-    Assert.IsTrue MergedEmpCollection.Count = 10
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Merge")
-Private Sub Test_MergeAllEmployeesOnEmplID_OneEmployee()
-    On Error GoTo TestFail
-    
-    'Arrange:
     '@Ignore UseMeaningfulName
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
+    Dim EC1 As EmployeeCollection
+    '@Ignore UseMeaningfulName
+    Dim EC2 As EmployeeCollection
+    Dim EC_Combo As EmployeeCollection
+    
+    Set EC1 = New EmployeeCollection
+    Set EC2 = New EmployeeCollection
+    
     Dim Emp As Employee
     
-    Set EmpCollection = New EmployeeCollection
-    Set Emp = New Employee
-    Emp.EmplID = "1"
-    Emp.DeptID = "1"
-    Emp.JobCode = "1"
-    Emp.HoursWorked("01A") = 1
-    EmpCollection.Add Emp
+    For Index = 0 To 9
+        Set Emp = New Employee
+        
+        Emp.EmplID = Str$(Index)
+        Emp.Name = ("Employee Number " & Str$(Index))
+        Emp.JobCode = "JOB"
+        Emp.Department = "DEPT1"
+        Emp.IsHourly = True
+        Emp.Source = "Trust Me, Bro"
+        
+        EC1.Add Emp
+    Next Index
+    
+    For Index = 10 To 19
+        Set Emp = New Employee
+        
+        Emp.EmplID = Str$(Index)
+        Emp.Name = ("Employee Number " & Str$(Index))
+        Emp.JobCode = "JOB"
+        Emp.Department = "DEPT2"
+        Emp.IsHourly = True
+        Emp.Source = "Trust Me, Bro"
+        
+        EC2.Add Emp
+    Next Index
     
     'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployeesOnEmplID()
+    Set EC_Combo = EC1.Combine(EC2)
     
     'Assert:
-    Assert.IsTrue MergedEmpCollection.Count = 1
-    Assert.IsTrue MergedEmpCollection.Item(1).EmplID = "1"
-    Assert.IsTrue MergedEmpCollection.Item(1).DeptID = "1"
-    Assert.IsTrue MergedEmpCollection.Item(1).JobCode = "1"
-    Assert.IsTrue MergedEmpCollection.Item(1).HoursWorked = 1
-    Assert.IsTrue MergedEmpCollection.Item(1).HoursWorked("01A") = 1
+    For Index = 0 To 19
+        Assert.IsTrue EC_Combo.Item(Index + 1).EmplID = Index
+        Assert.IsTrue EC_Combo.Item(Index + 1).Name = ("Employee Number " & Str$(Index))
+        Assert.IsTrue EC_Combo.Item(Index + 1).JobCode = "JOB"
+        Assert.IsTrue EC_Combo.Item(Index + 1).IsHourly = True
+        Assert.IsTrue EC_Combo.Item(Index + 1).Source = "Trust Me, Bro"
+    Next Index
+    
+    For Index = 0 To 9
+        Assert.IsTrue EC_Combo.Item(Index + 1).Department = "DEPT1"
+    Next Index
+    
+    For Index = 10 To 19
+        Assert.IsTrue EC_Combo.Item(Index + 1).Department = "DEPT2"
+    Next Index
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -707,32 +774,32 @@ TestFail:
 End Sub
 
 '@TestMethod("Uncategorized")
-Private Sub Test_CreateFromWorksheet_Hourly()
+Private Sub Test_GetEmployeeCollectionFromWorksheet_Hourly()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim TestWorkbook As Workbook
-    Dim HourlyWorksheet As Worksheet
-    Dim FilePath As String
-    Dim FileName As String
-    FilePath = ThisWorkbook.Path & "/TestData/"
-    FileName = "Test Workbook - Appointed and Hourly.xlsx"
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    Dim EC As EmployeeCollection
     
-    Workbooks.Open FileName:=FilePath & FileName, ReadOnly:=True
+    Dim WorkbookFileDir As String
+    Dim WorkbookFileName As String
+    WorkbookFileDir = ThisWorkbook.Path & "/TestData/"
+    WorkbookFileName = "Test Workbook 1.xlsx"
     
-    Set TestWorkbook = Workbooks.Item(FileName)
+    Workbooks.Open fileName:=WorkbookFileDir & WorkbookFileName, ReadOnly:=True
+    Set wb = Workbooks.Item(WorkbookFileName)
+    Set ws = wb.Sheets.Item("Hourly")
     
-    Set HourlyWorksheet = WBTools.GetSheetLike("*Hourly*", TestWorkbook)
-    Set Employees = New EmployeeCollection
+    Set EC = New EmployeeCollection
     
     'Act:
-    Set Employees = Employees.CreateEmployeeCollectionFromWorksheet(HourlyWorksheet, True)
+    Set EC = EC.CreateEmployeeCollectionFromWorksheet(ws, True, Source:=wb.Path)
     
     'Assert:
     Dim Index As Long
     Dim PayPeriodString As String
-    For Index = 0 To Employees.Count - 1
+    For Index = 0 To EC.Count - 1
         If Index Mod 2 = 0 Then
             PayPeriodString = Format$(WorksheetFunction.RoundUp((Index + 1) / 2, 0), "00") & "A"
         Else
@@ -740,16 +807,51 @@ Private Sub Test_CreateFromWorksheet_Hourly()
         End If
                 
         ' Emp only has 10 hours, and those hours are in a specific period (different for each Emp)
-        Assert.IsTrue Employees.Item(Index + 1).HoursWorked() = 10
-        Assert.IsTrue Employees.Item(Index + 1).HoursWorked(PayPeriodString) = 10
-        Assert.IsTrue Employees.Item(Index + 1).DeptID = Format$(Index + 1, "00000")
+        Assert.IsTrue EC.Item(Index + 1).hoursWorked() = 10
+        Assert.IsTrue EC.Item(Index + 1).hoursWorked(PayPeriodString) = 10
+        Assert.IsTrue EC.Item(Index + 1).Department = Format$(Index + 1, "00000")
     Next Index
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
     On Error Resume Next
     
-    TestWorkbook.Close
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollection_ReadFromWorkbook_Hourly_CorrectCount()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC As EmployeeCollection
+    Set EC = New EmployeeCollection
+    
+    Dim wb As Workbook
+    Dim ws As Worksheet
+    
+    Dim WorkbookFileDir As String
+    Dim WorkbookFileName As String
+    
+    WorkbookFileDir = ThisWorkbook.Path & "/TestData/"
+    WorkbookFileName = "Test Workbook 1.xlsx"
+    
+    'Act:
+    Workbooks.Open fileName:=WorkbookFileDir & WorkbookFileName, ReadOnly:=True
+    Set wb = Workbooks.Item(WorkbookFileName)
+    Set ws = wb.Sheets.Item("Hourly")
+    Set EC = EC.CreateEmployeeCollectionFromWorksheet(ws, True, Source:=WorkbookFileName)
+    wb.Close
+    
+    'Assert:
+    Assert.IsTrue EC.Count = 24
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
     
     Exit Sub
 TestFail:
@@ -758,41 +860,35 @@ TestFail:
 End Sub
 
 '@TestMethod("Uncategorized")
-Private Sub Test_CreateFromWorksheet_Appointed_WithIndependentStudy()
+Private Sub Test_EmployeeCollection_ReadFromWorkbook_Appointed_CorrectCount()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim Employees As EmployeeCollection
-    Dim TestWorkbook As Workbook
-    Dim AppointedWorksheet As Worksheet
-    Dim FilePath As String
-    Dim FileName As String
-    FilePath = ThisWorkbook.Path & "/TestData/"
-    FileName = "Test Workbook - Appointed and Hourly - With Independent Study.xlsx"
+    Dim EC As EmployeeCollection
+    Set EC = New EmployeeCollection
     
-    Workbooks.Open FileName:=FilePath & FileName, ReadOnly:=True
+    Dim wb As Workbook
+    Dim ws As Worksheet
     
-    Set TestWorkbook = Workbooks.Item(FileName)
+    Dim WorkbookFileDir As String
+    Dim WorkbookFileName As String
     
-    Set AppointedWorksheet = WBTools.GetSheetLike("*Appointed*", TestWorkbook)
-    Set Employees = New EmployeeCollection
+    WorkbookFileDir = ThisWorkbook.Path & "/TestData/"
+    WorkbookFileName = "Test Workbook 2.xlsx"
     
     'Act:
-    Set Employees = Employees.CreateEmployeeCollectionFromWorksheet(AppointedWorksheet, False)
+    Workbooks.Open fileName:=WorkbookFileDir & WorkbookFileName, ReadOnly:=True
+    Set wb = Workbooks.Item(WorkbookFileName)
+    Set ws = wb.Sheets.Item("Appointed")
+    Set EC = EC.CreateEmployeeCollectionFromWorksheet(ws, True, Source:=WorkbookFileName)
+    wb.Close
     
     'Assert:
-    Assert.IsTrue Employees.Item(1).HoursWorked = 11
-    Assert.IsTrue Employees.Item(2).HoursWorked = 22
-    ' Skip the 3rd row (independent study)
-    Assert.IsTrue Employees.Item(3).HoursWorked = 44
-    Assert.IsTrue Employees.Item(4).HoursWorked = 55
-    Assert.IsTrue Employees.Count = 23
-    
+    Assert.IsTrue EC.Count = 24
+
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
     On Error Resume Next
-    
-    TestWorkbook.Close
     
     Exit Sub
 TestFail:
@@ -800,34 +896,162 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("Merge")
-Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_Count()
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine_MultipleWorkbooks_AppointedAndHourly_CorrectCount()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim EmpArray(1 To 10) As Employee
+    Dim EC_Appointed As EmployeeCollection
+    Dim EC_Hourly As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    
+    Set EC_Appointed = New EmployeeCollection
+    Set EC_Hourly = New EmployeeCollection
+    
+    Dim wb_Appointed As Workbook
+    Dim wb_Hourly As Workbook
+    Dim ws_Appointed As Worksheet
+    Dim ws_Hourly As Worksheet
+    
+    Dim WorkbookFileDir As String
+    Dim WorkbookFileName_Appointed As String
+    Dim WorkbookFileName_Hourly As String
+    
+    WorkbookFileDir = ThisWorkbook.Path & "/TestData/"
+    WorkbookFileName_Appointed = "Test Workbook - Multiple Workbooks - Appointed and Hourly - File 2.xlsx"
+    WorkbookFileName_Hourly = "Test Workbook - Multiple Workbooks - Appointed and Hourly - File 1.xlsx"
+    
+    Workbooks.Open fileName:=WorkbookFileDir & WorkbookFileName_Appointed, ReadOnly:=True
+    Set wb_Appointed = Workbooks.Item(WorkbookFileName_Appointed)
+    Set ws_Appointed = wb_Appointed.Sheets.Item("Appointed")
+    Set EC_Appointed = EC_Appointed.CreateEmployeeCollectionFromWorksheet(ws_Appointed, False, Source:=WorkbookFileName_Appointed)
+    wb_Appointed.Close
+    
+    Workbooks.Open fileName:=WorkbookFileDir & WorkbookFileName_Hourly, ReadOnly:=True
+    Set wb_Hourly = Workbooks.Item(WorkbookFileName_Hourly)
+    Set ws_Hourly = wb_Hourly.Sheets.Item("Hourly")
+    Set EC_Hourly = EC_Hourly.CreateEmployeeCollectionFromWorksheet(ws_Hourly, True, Source:=WorkbookFileName_Hourly)
+    wb_Hourly.Close
+    
+    'Act:
+    Set EC_Combined = EC_Appointed.Combine(EC_Hourly)
+    
+    'Assert:
+    Debug.Print EC_Appointed.Count
+    Debug.Print EC_Hourly.Count
+    Debug.Print EC_Combined.Count
+    Assert.IsTrue EC_Combined.Count = 48
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine_SingleWorkbook_AppointedAndHourly_CorrectCount()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC_Appointed As EmployeeCollection
+    Dim EC_Hourly As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    
+    Set EC_Appointed = New EmployeeCollection
+    Set EC_Hourly = New EmployeeCollection
+    
+    Dim wb As Workbook
+    Dim ws_Appointed As Worksheet
+    Dim ws_Hourly As Worksheet
+    
+    Dim WorkbookFileDir As String
+    Dim WorkbookFileName As String
+    
+    WorkbookFileDir = ThisWorkbook.Path & "/TestData/"
+    WorkbookFileName = "Test Workbook - Appointed and Hourly.xlsx"
+    
+    Workbooks.Open fileName:=WorkbookFileDir & WorkbookFileName, ReadOnly:=True
+    Set wb = Workbooks.Item(WorkbookFileName)
+    Set ws_Appointed = wb.Sheets.Item("Appointed")
+    Set ws_Hourly = wb.Sheets.Item("Hourly")
+    Set EC_Appointed = EC_Appointed.CreateEmployeeCollectionFromWorksheet(ws_Appointed, False, Source:=WorkbookFileName)
+    Set EC_Hourly = EC_Hourly.CreateEmployeeCollectionFromWorksheet(ws_Hourly, True, Source:=WorkbookFileName)
+    wb.Close
+    
+    'Act:
+    Set EC_Combined = EC_Appointed.Combine(EC_Hourly)
+    
+    'Assert:
+    Assert.IsTrue EC_Combined.Count = 48
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine_EmptyCollections_CorrectCount()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    Dim EC1 As EmployeeCollection
+    Dim EC2 As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    
+    Set EC1 = New EmployeeCollection
+    Set EC2 = New EmployeeCollection
+    
+    'Act:
+    Set EC_Combined = EC1.Combine(EC2)
+    
+    'Assert:
+    Assert.IsTrue EC_Combined.Count = 0
+
+TestExit:
+    '@Ignore UnhandledOnErrorResumeNext
+    On Error Resume Next
+    
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+    Resume TestExit
+End Sub
+
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine_BaseCollectionEmpty_CorrectCount()
+    On Error GoTo TestFail
+    
+    'Arrange:
     Dim Index As Long
+    Dim EC1 As EmployeeCollection
+    Dim EC2 As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    Dim Emp(5) As Employee
     
-    Set EmpCollection = New EmployeeCollection
+    Set EC1 = New EmployeeCollection
+    Set EC2 = New EmployeeCollection
     
-    For Index = 1 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "1"
-        EmpArray(Index).Name = "John Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
+    For Index = 0 To 4
+        Set Emp(Index) = New Employee
+        Emp(Index).EmplID = Str(Index)
+        Emp(Index).Name = "Employee Number " & Str(Index)
+        EC2.Add Emp(Index)
     Next Index
     
     'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployees()
+    Set EC_Combined = EC1.Combine(EC2)
     
     'Assert:
-    Assert.IsTrue MergedEmpCollection.Count = 1
+    Assert.IsTrue EC_Combined.Count = 5
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -839,35 +1063,37 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("Merge")
-Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_EmplID()
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine_BaseCollectionEmpty_CorrectEmplIDs()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim EmpArray(1 To 10) As Employee
     Dim Index As Long
+    Dim EC1 As EmployeeCollection
+    Dim EC2 As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    Dim Emp(5) As Employee
     
-    Set EmpCollection = New EmployeeCollection
+    Set EC1 = New EmployeeCollection
+    Set EC2 = New EmployeeCollection
     
-    For Index = 1 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "1"
-        EmpArray(Index).Name = "John Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
+    For Index = 0 To 4
+        Set Emp(Index) = New Employee
+        Emp(Index).EmplID = Index
+        Emp(Index).Name = "Employee Number " & Index
+        EC2.Add Emp(Index)
     Next Index
     
     'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployees()
+    Set EC_Combined = EC1.Combine(EC2)
     
     'Assert:
-    Assert.IsTrue MergedEmpCollection.Item(1).EmplID = "1"
-
+    Assert.IsTrue EC_Combined.Item(1).EmplID = "0"
+    Assert.IsTrue EC_Combined.Item(2).EmplID = "1"
+    Assert.IsTrue EC_Combined.Item(3).EmplID = "2"
+    Assert.IsTrue EC_Combined.Item(4).EmplID = "3"
+    Assert.IsTrue EC_Combined.Item(5).EmplID = "4"
+    
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
     On Error Resume Next
@@ -878,34 +1104,32 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("Merge")
-Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_Name()
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine_SecondCollectionEmpty_CorrectCount()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim EmpArray(1 To 10) As Employee
     Dim Index As Long
+    Dim EC1 As EmployeeCollection
+    Dim EC2 As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    Dim Emp(5) As Employee
     
-    Set EmpCollection = New EmployeeCollection
+    Set EC1 = New EmployeeCollection
+    Set EC2 = New EmployeeCollection
     
-    For Index = 1 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "1"
-        EmpArray(Index).Name = "John Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
+    For Index = 0 To 4
+        Set Emp(Index) = New Employee
+        Emp(Index).EmplID = Str(Index)
+        Emp(Index).Name = "Employee Number " & Str(Index)
+        EC1.Add Emp(Index)
     Next Index
     
     'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployees()
+    Set EC_Combined = EC1.Combine(EC2)
     
     'Assert:
-    Assert.IsTrue MergedEmpCollection.Item(1).Name = "John Doe"
+    Assert.IsTrue EC_Combined.Count = 5
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -917,35 +1141,37 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("Merge")
-Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_DeptID()
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine_SecondCollectionEmpty_CorrectEmplIDs()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim EmpArray(1 To 10) As Employee
     Dim Index As Long
+    Dim EC1 As EmployeeCollection
+    Dim EC2 As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    Dim Emp(5) As Employee
     
-    Set EmpCollection = New EmployeeCollection
+    Set EC1 = New EmployeeCollection
+    Set EC2 = New EmployeeCollection
     
-    For Index = 1 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "1"
-        EmpArray(Index).Name = "John Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
+    For Index = 0 To 4
+        Set Emp(Index) = New Employee
+        Emp(Index).EmplID = Index
+        Emp(Index).Name = "Employee Number " & Index
+        EC1.Add Emp(Index)
     Next Index
     
     'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployees()
+    Set EC_Combined = EC1.Combine(EC2)
     
     'Assert:
-    Assert.IsTrue MergedEmpCollection.Item(1).DeptID = "DEPT"
-
+    Assert.IsTrue EC_Combined.Item(1).EmplID = "0"
+    Assert.IsTrue EC_Combined.Item(2).EmplID = "1"
+    Assert.IsTrue EC_Combined.Item(3).EmplID = "2"
+    Assert.IsTrue EC_Combined.Item(4).EmplID = "3"
+    Assert.IsTrue EC_Combined.Item(5).EmplID = "4"
+    
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
     On Error Resume Next
@@ -956,34 +1182,39 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("Merge")
-Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_JobCode()
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine_FiveAndFive_CorrectCount()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim EmpArray(1 To 10) As Employee
     Dim Index As Long
+    Dim EC1 As EmployeeCollection
+    Dim EC2 As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    Dim Emp(10) As Employee
     
-    Set EmpCollection = New EmployeeCollection
+    Set EC1 = New EmployeeCollection
+    Set EC2 = New EmployeeCollection
     
-    For Index = 1 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "1"
-        EmpArray(Index).Name = "John Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
+    For Index = 0 To 4
+        Set Emp(Index) = New Employee
+        Emp(Index).EmplID = Str(Index)
+        Emp(Index).Name = "Employee Number " & Index
+        EC1.Add Emp(Index)
+    Next Index
+    
+    For Index = 5 To 9
+        Set Emp(Index) = New Employee
+        Emp(Index).EmplID = Str(Index)
+        Emp(Index).Name = "Employee Number " & Index
+        EC2.Add Emp(Index)
     Next Index
     
     'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployees()
+    Set EC_Combined = EC1.Combine(EC2)
     
     'Assert:
-    Assert.IsTrue MergedEmpCollection.Item(1).JobCode = "JOB"
+    Assert.IsTrue EC_Combined.Count = 10
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -995,36 +1226,69 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("Merge")
-Private Sub Test_MergeAllEmployees_10Employees_1UniqueEmployee_HoursWorked()
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine_FiveAndFive_CorrectEmplIDs()
     On Error GoTo TestFail
     
     'Arrange:
-    '@Ignore UseMeaningfulName
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim EmpArray(1 To 10) As Employee
     Dim Index As Long
+    Dim EC1 As EmployeeCollection
+    Dim EC2 As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    Dim Emp(10) As Employee
     
-    Set EmpCollection = New EmployeeCollection
+    Set EC1 = New EmployeeCollection
+    Set EC2 = New EmployeeCollection
     
-    For Index = 1 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "1"
-        EmpArray(Index).Name = "John Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
+    For Index = 0 To 9
+        Set Emp(Index) = New Employee
+    Next Index
+    
+    Emp(0).EmplID = "123"
+    Emp(1).EmplID = "456"
+    Emp(2).EmplID = "789"
+    Emp(3).EmplID = "012"
+    Emp(4).EmplID = "345"
+    Emp(5).EmplID = "678"
+    Emp(6).EmplID = "901"
+    Emp(7).EmplID = "234"
+    Emp(8).EmplID = "567"
+    Emp(9).EmplID = "890"
+    
+    Emp(0).Name = "Ash"
+    Emp(1).Name = "Misty"
+    Emp(2).Name = "Brock"
+    Emp(3).Name = "Gary"
+    Emp(4).Name = "Oak"
+    Emp(5).Name = "Elm"
+    Emp(6).Name = "Bill"
+    Emp(7).Name = "Ericka"
+    Emp(8).Name = "Lance"
+    Emp(9).Name = "James"
+    
+    For Index = 0 To 4
+        EC1.Add Emp(Index)
+    Next Index
+    
+    For Index = 5 To 9
+        EC2.Add Emp(Index)
     Next Index
     
     'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployees()
+    Set EC_Combined = EC1.Combine(EC2)
     
     'Assert:
-    Assert.IsTrue MergedEmpCollection.Item(1).HoursWorked = 10
-    Assert.IsTrue MergedEmpCollection.Item(1).HoursWorked("01A") = 10
+    Assert.IsTrue EC_Combined.Item(1).EmplID = "123"
+    Assert.IsTrue EC_Combined.Item(2).EmplID = "456"
+    Assert.IsTrue EC_Combined.Item(3).EmplID = "789"
+    Assert.IsTrue EC_Combined.Item(4).EmplID = "012"
+    Assert.IsTrue EC_Combined.Item(5).EmplID = "345"
+    Assert.IsTrue EC_Combined.Item(6).EmplID = "678"
+    Assert.IsTrue EC_Combined.Item(7).EmplID = "901"
+    Assert.IsTrue EC_Combined.Item(8).EmplID = "234"
+    Assert.IsTrue EC_Combined.Item(9).EmplID = "567"
+    Assert.IsTrue EC_Combined.Item(10).EmplID = "890"
+    
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -1036,36 +1300,69 @@ TestFail:
     Resume TestExit
 End Sub
 
-'@TestMethod("Multi-Method")
-Private Sub Test_MergeAllEmployees_ToArrayContainer_10Employees_1UniqueEmployee_Rows()
+'@TestMethod("Uncategorized")
+Private Sub Test_EmployeeCollectionCombine_FiveAndFive_CorrectNames()
     On Error GoTo TestFail
     
     'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim MergedEmpArray As ArrayContainer
-    Dim EmpArray(1 To 10) As Employee
     Dim Index As Long
+    Dim EC1 As EmployeeCollection
+    Dim EC2 As EmployeeCollection
+    Dim EC_Combined As EmployeeCollection
+    Dim Emp(10) As Employee
     
-    Set EmpCollection = New EmployeeCollection
+    Set EC1 = New EmployeeCollection
+    Set EC2 = New EmployeeCollection
     
-    For Index = 1 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "1"
-        EmpArray(Index).Name = "John Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
+    For Index = 0 To 9
+        Set Emp(Index) = New Employee
+    Next Index
+    
+    Emp(0).EmplID = "123"
+    Emp(1).EmplID = "456"
+    Emp(2).EmplID = "789"
+    Emp(3).EmplID = "012"
+    Emp(4).EmplID = "345"
+    Emp(5).EmplID = "678"
+    Emp(6).EmplID = "901"
+    Emp(7).EmplID = "234"
+    Emp(8).EmplID = "567"
+    Emp(9).EmplID = "890"
+    
+    Emp(0).Name = "Ash"
+    Emp(1).Name = "Misty"
+    Emp(2).Name = "Brock"
+    Emp(3).Name = "Gary"
+    Emp(4).Name = "Oak"
+    Emp(5).Name = "Elm"
+    Emp(6).Name = "Bill"
+    Emp(7).Name = "Ericka"
+    Emp(8).Name = "Lance"
+    Emp(9).Name = "James"
+    
+    For Index = 0 To 4
+        EC1.Add Emp(Index)
+    Next Index
+    
+    For Index = 5 To 9
+        EC2.Add Emp(Index)
     Next Index
     
     'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployees()
-    Set MergedEmpArray = MergedEmpCollection.ToArrayContainer()
+    Set EC_Combined = EC1.Combine(EC2)
     
     'Assert:
-    Assert.IsTrue MergedEmpArray.Rows = 2
+    Assert.IsTrue EC_Combined.Item(1).Name = "Ash"
+    Assert.IsTrue EC_Combined.Item(2).Name = "Misty"
+    Assert.IsTrue EC_Combined.Item(3).Name = "Brock"
+    Assert.IsTrue EC_Combined.Item(4).Name = "Gary"
+    Assert.IsTrue EC_Combined.Item(5).Name = "Oak"
+    Assert.IsTrue EC_Combined.Item(6).Name = "Elm"
+    Assert.IsTrue EC_Combined.Item(7).Name = "Bill"
+    Assert.IsTrue EC_Combined.Item(8).Name = "Ericka"
+    Assert.IsTrue EC_Combined.Item(9).Name = "Lance"
+    Assert.IsTrue EC_Combined.Item(10).Name = "James"
+    
 
 TestExit:
     '@Ignore UnhandledOnErrorResumeNext
@@ -1076,138 +1373,3 @@ TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
     Resume TestExit
 End Sub
-
-'@TestMethod("Multi-Method")
-Private Sub Test_MergeAllEmployees_ToArrayContainer_10Employees_1UniqueEmployee_Rows_NoHeader()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim MergedEmpArray As ArrayContainer
-    Dim EmpArray(1 To 10) As Employee
-    Dim Index As Long
-    
-    Set EmpCollection = New EmployeeCollection
-    
-    For Index = 1 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "1"
-        EmpArray(Index).Name = "John Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
-    Next Index
-    
-    'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployees()
-    Set MergedEmpArray = MergedEmpCollection.ToArrayContainer(Headers:=False)
-    
-    'Assert:
-    Assert.IsTrue MergedEmpArray.Rows = 1
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Multi-Method")
-Private Sub Test_MergeAllEmployeesOnDeptID_ToArrayContainer_10Employees_1UniqueEmployee_Rows_NoHeader()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim MergedEmpArray As ArrayContainer
-    Dim EmpArray(1 To 10) As Employee
-    Dim Index As Long
-    
-    Set EmpCollection = New EmployeeCollection
-    
-    For Index = 1 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "1"
-        EmpArray(Index).Name = "John Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
-    Next Index
-    
-    'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployees()
-    Set MergedEmpArray = MergedEmpCollection.ToArrayContainer(Headers:=False, IncludeJobCode:=False)
-    
-    'Assert:
-    Assert.IsTrue MergedEmpArray.Rows = 1
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-
-'@TestMethod("Multi-Method")
-Private Sub Test_MergeAllEmployeesOnDeptID_ToArrayContainer_10Employees_2UniqueEmployee_Rows()
-    On Error GoTo TestFail
-    
-    'Arrange:
-    Dim EmpCollection As EmployeeCollection
-    Dim MergedEmpCollection As EmployeeCollection
-    Dim MergedEmpArray As ArrayContainer
-    Dim EmpArray(1 To 10) As Employee
-    Dim Index As Long
-    
-    Set EmpCollection = New EmployeeCollection
-    
-    For Index = 1 To 5
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "1"
-        EmpArray(Index).Name = "John Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
-    Next Index
-    
-    For Index = 6 To 10
-        Set EmpArray(Index) = New Employee
-        EmpArray(Index).EmplID = "2"
-        EmpArray(Index).Name = "Jane Doe"
-        EmpArray(Index).DeptID = "DEPT"
-        EmpArray(Index).JobCode = "JOB"
-        EmpArray(Index).HoursWorked("01A") = 1
-        
-        EmpCollection.Add EmpArray(Index)
-    Next Index
-    
-    'Act:
-    Set MergedEmpCollection = EmpCollection.MergeAllEmployees()
-    Set MergedEmpArray = MergedEmpCollection.ToArrayContainer(IncludeJobCode:=False)
-    
-    'Assert:
-    Assert.IsTrue MergedEmpArray.Rows = 3
-
-TestExit:
-    '@Ignore UnhandledOnErrorResumeNext
-    On Error Resume Next
-    
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-    Resume TestExit
-End Sub
-

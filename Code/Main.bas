@@ -2,169 +2,213 @@ Attribute VB_Name = "Main"
 '@Folder(FTECalc)
 Option Explicit
 
-'@VariableDescription("Stores the Unix Timestamp at runtime, set in the Main method.")
-Private UnixTimestamp As LongLong
-Attribute UnixTimestamp.VB_VarDescription = "Stores the Unix Timestamp at runtime, set in the Main method."
+Public Const DEBUG_ON As Boolean = True
 
-'@Description("Returns the Unix Timestamp recorded at runtime in the Main method.")
-Public Function GetTimestamp() As LongLong
-Attribute GetTimestamp.VB_Description = "Returns the Unix Timestamp recorded at runtime in the Main method."
-    GetTimestamp = UnixTimestamp
+Private Type TMain
+    Directory As String
+End Type
+
+Private this As TMain
+
+Public Property Let Directory(ByVal Dir As String)
+    this.Directory = Dir
+End Property
+
+Public Property Get Directory() As String
+    Directory = this.Directory
+End Property
+
+Public Function CalculateFTE(ByVal hoursWorked As Single) As Single
+    Dim FTE As Single
+    FTE = hoursWorked / 198
+    
+    CalculateFTE = FTE
 End Function
 
-'@Description("Returns the Unix Timestamp recorded at runtime in the Main method as a string.")
-Public Function GetTimestampStr() As String
-Attribute GetTimestampStr.VB_Description = "Returns the Unix Timestamp recorded at runtime in the Main method as a string."
-    GetTimestampStr = Trim$(Str$(GetTimestamp()))
+Public Function inJobCodeList(ByVal Value As Variant) As Boolean
+    ' Default to False
+    inJobCodeList = False
+    
+    If Trim$(Value) = "PTF" Then
+        inJobCodeList = True
+    ElseIf Trim$(Value) = "PTH" Then
+        inJobCodeList = True
+    ElseIf Trim$(Value) = "SUB" Then
+        inJobCodeList = True
+    Else
+        inJobCodeList = False
+    End If
 End Function
 
-'@EntryPoint
+'@Description (The primary (main) Sub. The application should start and end here.)
 Public Sub Main()
-    UnixTimestamp = UnixTime()
-    Dim JobCodes(1 To 3) As String
-    JobCodes(1) = "PTF"
-    JobCodes(2) = "PTH"
-    JobCodes(3) = "SUB"
-    
-    ' History Vars
-    Dim ApplicationDisplayAlerts As Boolean
-    
-    ' Loop Vars
-    Dim Elem As Variant
-    
-    ' IO Vars
-    Dim Output As Workbook
-    Dim OutputFileName As Variant
-    Dim InputFileNames As Variant
-    
-    ' EmployeeCollection Vars
-    Dim EC_Temp As EmployeeCollection
-    Dim EC_All As EmployeeCollection
-    Dim EC_Filtered As EmployeeCollection
-    
-    ' EmployeeCollection Array Vars
-    Dim AC_Filtered_Merged As ArrayContainer
-    Dim AC_GroupByDeptID As ArrayContainer
-    Dim AC_GroupByJobCode As ArrayContainer
-    
-    ' Workbook/Worksheet Vars
+    ' TODO Reorganize code so that the application enters via Main, activating the necessary forms, instead of the other way around.
     Dim wb As Workbook
-    Dim ws As Worksheet
     
-    Set EC_Temp = New EmployeeCollection
-    Set EC_All = New EmployeeCollection
-    Set EC_Filtered = New EmployeeCollection
+    Dim HourlyEmployees As EmployeeCollection
+    Dim HourlyEmployees_Temp As EmployeeCollection
+    Dim AppointedEmployees As EmployeeCollection
+    Dim AppointedEmployees_Temp As EmployeeCollection
     
-    ' Get list of workbooks from user
-    InputFileNames = Application.GetOpenFilename( _
-                     MultiSelect:=True, _
-                     FileFilter:="Excel Documents, *.xls;*.xlsx;*.xlsm", _
-                     Title:="Select Workbooks for FTE Calculation")
-
-    ' If InputFileNames is not an array of Variants then exit
-    If VarType(InputFileNames) <> 8204 Then Exit Sub
-
-    For Each Elem In InputFileNames
-        Set wb = Workbooks.Open(Elem, ReadOnly:=True)
-        
-        ' Create Appointed EmployeeCollection
-        Set ws = WBTools.GetSheetLike("*Appointed*", wb)
-        If Not ws Is Nothing Then
-            Set EC_Temp = New EmployeeCollection
-            Set EC_Temp = EC_Temp.CreateEmployeeCollectionFromWorksheet(ws, False)
-            EC_All.Concat EC_Temp
+    Set HourlyEmployees = New EmployeeCollection
+    Set HourlyEmployees_Temp = New EmployeeCollection
+    Set AppointedEmployees = New EmployeeCollection
+    Set AppointedEmployees_Temp = New EmployeeCollection
+    
+    Dim fileName As Variant
+    For Each fileName In frmFileSelection.GetFileNames
+        If fileName <> vbNullString Then
+            Workbooks.Open fileName:=this.Directory & "\" & fileName, ReadOnly:=True
+            Set wb = Workbooks.Item(fileName)
+            
+            Dim ws As Worksheet
+            For Each ws In wb.Sheets
+                If ws.Name Like "*Hourly*" Then
+                    Set HourlyEmployees_Temp = HourlyEmployees_Temp.CreateEmployeeCollectionFromWorksheet(ws, True, Source:=wb.Name)
+                    Set HourlyEmployees = HourlyEmployees.Combine(HourlyEmployees_Temp)
+                ElseIf ws.Name Like "*Appointed*" Then
+                    Set AppointedEmployees_Temp = AppointedEmployees_Temp.CreateEmployeeCollectionFromWorksheet(ws, False, Source:=wb.Name)
+                    Set AppointedEmployees = AppointedEmployees.Combine(AppointedEmployees_Temp)
+                End If
+            Next ws
+            
+            Workbooks.Item(fileName).Close SaveChanges:=False
         End If
-        Set EC_Temp = Nothing
-        
-        ' Create Hourly EmployeeCollection
-        Set ws = WBTools.GetSheetLike("*Hourly*", wb)
-        If Not ws Is Nothing Then
-            Set EC_Temp = New EmployeeCollection
-            Set EC_Temp = EC_Temp.CreateEmployeeCollectionFromWorksheet(ws, True)
-            EC_All.Concat EC_Temp
-        End If
-        Set EC_Temp = Nothing
-        
-        wb.Close
-    Next Elem
-    
-    ' filter for only the desired JobCodes
-    For Each Elem In JobCodes
-        EC_Filtered.Concat EC_All.Filter(JobCodeFilter:=Elem)
-    Next Elem
-    Set EC_All = Nothing
-    
-    Set Output = Workbooks.Add
-    With Output
-        .Title = "FTECalc Output " & GetTimestampStr()
-        .Subject = "FTE"
-        
-        '@Ignore AssignmentNotUsed
-        Set ws = .Worksheets.Item(1)
-        
-        .Worksheets.Add After:=ws, Count:=3
-        
-        ApplicationDisplayAlerts = Application.DisplayAlerts
-        Application.DisplayAlerts = False
-        ws.Delete
-        Application.DisplayAlerts = ApplicationDisplayAlerts
-    End With
-    
-    Dim EC_Temporary As EmployeeCollection
-    Set EC_Temporary = EC_Filtered.MergeAllEmployees()
-    Set AC_Filtered_Merged = EC_Temporary.ToArrayContainer()
-    With Output.Worksheets.Item(1)
-        .Name = "FTE Summary"
-        .Range( _
-        "A1:" _
-      & WBTools.GetColumnLetterByNumber(AC_Filtered_Merged.columns) _
-      & Trim$(Str$(AC_Filtered_Merged.Rows)) _
-        ) = AC_Filtered_Merged.Data
-    End With
-    Set AC_Filtered_Merged = Nothing
-    
-    Set EC_Temporary = EC_Filtered.MergeAllEmployeesOnDeptID()
-    Set AC_GroupByDeptID = EC_Temporary.ToArrayContainer(IncludeJobCode:=False)
-    With Output.Worksheets.Item(2)
-        .Name = "GrpBy DeptID"
-        .Range( _
-        "A1:" _
-      & WBTools.GetColumnLetterByNumber(AC_GroupByDeptID.columns) _
-      & Trim$(Str$(AC_GroupByDeptID.Rows)) _
-        ) = AC_GroupByDeptID.Data
-    End With
-    Set AC_GroupByDeptID = Nothing
-    
-    Set AC_GroupByJobCode = _
-                          EC_Filtered.MergeAllEmployeesOnJobCode() _
-                          .ToArrayContainer(IncludeDeptID:=False)
-    Set EC_Filtered = Nothing
-    With Output.Worksheets.Item(3)
-        .Name = "GrpBy JobCode"
-        .Range( _
-        "A1:" _
-      & WBTools.GetColumnLetterByNumber(AC_GroupByJobCode.columns) _
-      & Trim$(Str$(AC_GroupByJobCode.Rows)) _
-        ) = AC_GroupByJobCode.Data
-    End With
-    Set AC_GroupByJobCode = Nothing
+    Next fileName
 
-    ' save the workbook
-    With Output
-        Do
-            OutputFileName = Application.GetSaveAsFilename( _
-                             InitialFileName:="FTECalc_Output_" & GetTimestampStr() & ".xlsx", _
-                             FileFilter:="Excel Files (*.xlsx),*.xlsx")
-        Loop Until OutputFileName <> False
+    Dim HourlyAndAppointedEmployees As EmployeeCollection
+    Set HourlyAndAppointedEmployees = AppointedEmployees.Combine(HourlyEmployees)
+    
+    Dim wsFTECombined As Worksheet
+    Dim wsFTEByJobCode As Worksheet
+    Dim wsFTEByDepartment As Worksheet
+    Dim AlertsEnabled As Boolean
+    
+    ' Ensure that DisplayAlerts is disabled, delete sheets,
+    '   then ensure that DisplayAlerts is set to whatever value it held before this action.
+    AlertsEnabled = Application.DisplayAlerts
+    Application.DisplayAlerts = True
+    
+    Set wsFTECombined = BuildFTECombined(HourlyAndAppointedEmployees)
+    wsFTECombined.Range("A1:ZZ9999").Copy _
+        Destination:=Sheet1.Range("A1:ZZ9999")
+    wsFTECombined.Delete
+    
+    Set wsFTEByJobCode = BuildFTESummaryByJobCode(HourlyAndAppointedEmployees)
+    wsFTEByJobCode.Range("A1:ZZ9999").Copy _
+        Destination:=Sheet2.Range("A1:ZZ9999")
+    wsFTEByJobCode.Delete
+    
+    Set wsFTEByDepartment = BuildFTESummaryByDepartment(HourlyAndAppointedEmployees)
+    wsFTEByDepartment.Range("A1:ZZ9999").Copy _
+        Destination:=Sheet3.Range("A1:ZZ9999")
+    wsFTEByDepartment.Delete
+    
+    Application.DisplayAlerts = AlertsEnabled
         
-        .SaveAs FileName:=OutputFileName
-        .Close
-    End With
-
+    End
+    
+    Unload frmFileSelection
+    
 End Sub
 
-'@Description "Return a LongLong representing the number of seconds since January 1, 1970."
-Public Function UnixTime() As LongLong
-Attribute UnixTime.VB_Description = "Return a LongLong representing the number of seconds since January 1, 1970."
-    UnixTime = DateDiff("s", "1/1/1970 00:00:00", Now)
+Public Function BuildFTECombined(ByVal Employees As EmployeeCollection) As Worksheet
+    Dim ws As Worksheet
+    Dim EC As EmployeeCollection
+    Dim Emp As Employee
+    Dim Index As Long
+    
+    Set ws = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets.Item(ThisWorkbook.Sheets.Count))
+    Set EC = Employees.Copy
+    
+    ws.Range("A1").Value = "Empl ID"
+    ws.Range("B1").Value = "Name (LN, FN)"
+    ws.Range("C1").Value = "Department"
+    ws.Range("D1").Value = "Job Code"
+    ws.Range("E1").Value = "Hours"
+    ws.Range("F1").Value = "FTE%"
+    ws.Range("G1").Value = "Source"
+    
+    For Index = 1 To EC.Count
+        Set Emp = EC.Item(Index)
+        WBTools.setCellValueAt ws, 1, Index + 1, Emp.EmplID
+        WBTools.setCellValueAt ws, 2, Index + 1, Emp.Name
+        WBTools.setCellValueAt ws, 3, Index + 1, Emp.Department
+        WBTools.setCellValueAt ws, 4, Index + 1, Emp.JobCode
+        WBTools.setCellValueAt ws, 5, Index + 1, Emp.hoursWorked
+        WBTools.setCellValueAt ws, 6, Index + 1, Emp.hoursWorked / 198 * 100
+        WBTools.setCellValueAt ws, 7, Index + 1, Emp.Source
+    Next Index
+    
+    Set BuildFTECombined = ws
+    Set EC = Nothing
 End Function
+
+Public Function BuildFTESummaryByJobCode(ByVal Employees As EmployeeCollection) As Worksheet
+    Dim ws As Worksheet
+    Dim EC As EmployeeCollection
+    Dim Emp As Employee
+    Dim Index As Long
+    
+    Set ws = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets.Item(ThisWorkbook.Sheets.Count))
+    Set EC = Employees.Copy
+    
+    ws.Range("A1").Value = "Empl ID"
+    ws.Range("B1").Value = "Name (LN, FN)"
+    ws.Range("C1").Value = "Job Code"
+    ws.Range("D1").Value = "Hours"
+    ws.Range("E1").Value = "FTE%"
+    
+    Dim employeesByJobCode As EmployeeCollection
+    Set employeesByJobCode = EC.MergeDuplicateEmployeesOnJobCode()
+    
+    For Index = 1 To employeesByJobCode.Count
+        Set Emp = employeesByJobCode.Item(Index)
+        WBTools.setCellValueAt ws, 1, Index + 1, Emp.EmplID
+        WBTools.setCellValueAt ws, 2, Index + 1, Emp.Name
+        WBTools.setCellValueAt ws, 3, Index + 1, Emp.JobCode
+        WBTools.setCellValueAt ws, 4, Index + 1, Emp.hoursWorked
+        WBTools.setCellValueAt ws, 5, Index + 1, Emp.hoursWorked / 198 * 100
+    Next Index
+    
+    Set BuildFTESummaryByJobCode = ws
+    Set EC = Nothing
+End Function
+
+Public Function BuildFTESummaryByDepartment(ByVal Employees As EmployeeCollection) As Worksheet
+    Dim ws As Worksheet
+    Dim EC As EmployeeCollection
+    
+    Dim DataArray() As Variant
+
+    Dim Index As Long
+
+    Set ws = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets.Item(ThisWorkbook.Sheets.Count))
+    Set EC = Employees.Copy
+    
+    ws.Range("A1").Value = "Empl ID"
+    ws.Range("B1").Value = "Name (LN, FN)"
+    ws.Range("C1").Value = "Department"
+    ws.Range("D1").Value = "Hours"
+    ws.Range("E1").Value = "FTE%"
+    
+    Dim employeesByDepartment As EmployeeCollection
+    Set employeesByDepartment = EC.MergeDuplicateEmployeesOnDepartment()
+    
+    ReDim DataArray(employeesByDepartment.Count, 5)
+    
+    For Index = 0 To employeesByDepartment.Count - 1:
+        DataArray(Index, 0) = employeesByDepartment.Item(Index + 1).EmplID
+        DataArray(Index, 1) = employeesByDepartment.Item(Index + 1).Name
+        DataArray(Index, 2) = employeesByDepartment.Item(Index + 1).Department
+        DataArray(Index, 3) = employeesByDepartment.Item(Index + 1).hoursWorked
+        DataArray(Index, 4) = employeesByDepartment.Item(Index + 1).hoursWorked / 198 * 100
+    Next Index
+    
+    ws.Range("A2:E25").Value = DataArray
+    
+    Set BuildFTESummaryByDepartment = ws
+    Set EC = Nothing
+End Function
+
+

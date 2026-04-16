@@ -7,407 +7,272 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'@Folder("FTECalc")
 Option Explicit
+'@Folder(HCM)
+'@ModuleDescription(A custom implementation of Collection used to store, sort, etc instances of the Employee class.)
 
 Private Type TEmployeeCollection
     Employees As Collection
+    ' Note: The Collection class has the following:
+    ' Collection.Add(Item, [Key], [Before], [After])
+    ' Collection.Remove(Index)
+    ' Collection.Item(Index)
+    ' Collection.Count()
 End Type
 
 Private this As TEmployeeCollection
+
+'@Description(Adds an instance of the Employee class to the Collection.)
+Public Sub Add(ByVal employeeToBeAdded As Employee, Optional ByVal CollectionName As String = vbNullString)
+    If Main.DEBUG_ON Then
+        Dim DebugString As String
+        DebugString = "EmployeeCollection.Add " & employeeToBeAdded.Name & " (" & employeeToBeAdded.eKey
+        If CollectionName <> vbNullString Then DebugString = DebugString & ", " & CollectionName
+        DebugString = DebugString & ")"
+        Debug.Print DebugString
+    End If
+    
+    If Not employeeToBeAdded Is Nothing Then
+        If Not HasKey(employeeToBeAdded.eKey) Then
+            this.Employees.Add employeeToBeAdded, employeeToBeAdded.eKey
+            If Main.DEBUG_ON Then Debug.Print "Added: " & employeeToBeAdded.Name & " (" & employeeToBeAdded.eKey & ")"
+        Else
+            If Main.DEBUG_ON Then Debug.Print "Already Exists: " & employeeToBeAdded.Name & " (" & employeeToBeAdded.eKey & ")"
+            Dim employeeExisting As Employee
+            Dim employeeMerged As Employee
+            Set employeeExisting = Item(employeeToBeAdded.eKey)
+            Set employeeMerged = employeeToBeAdded.MergeEmployeeHours(employeeExisting, employeeExisting.Department, employeeExisting.JobCode, employeeExisting.Source)
+            If Main.DEBUG_ON Then Debug.Print employeeToBeAdded.eKey & " - " & Item(employeeToBeAdded.eKey).Name
+            Remove Item(employeeToBeAdded.eKey)
+            this.Employees.Add employeeMerged, employeeMerged.eKey
+        End If
+    Else
+        If Main.DEBUG_ON Then Debug.Print "Empty Object"
+    End If
+End Sub
+
+'@Obsolete
+'@Description(Checks to see if an Employee key exists in the Collection, returning True or False.)
+Public Function HasKey(ByVal Key As Variant) As Boolean
+    '@Ignore VariableNotUsed
+    Dim var As Employee
+    On Error GoTo ERROR_HANDLING
+    '@Ignore AssignmentNotUsed
+    Set var = this.Employees.Item(Key)
+    HasKey = (Err.Number = 0)
+    
+    GoTo FINALLY
+    
+ERROR_HANDLING:
+    HasKey = (Err.Number = 0)
+    
+FINALLY:
+    If Main.DEBUG_ON Then Debug.Print "EmployeeCollection.HasKey(" & Key & ") = " & (Err.Number = 0)
+    Err.Clear
+End Function
+
+'@Description(Removes an instance of the Employee class from the Collection.)
+Public Sub Remove(ByVal Emp As Employee)
+    If Main.DEBUG_ON Then Debug.Print "EmployeeCollection.Remove: " & Emp.eKey
+    this.Employees.Remove (Emp.eKey)
+End Sub
+
+Public Property Get Item(ByVal Index As Variant) As Employee
+    Set Item = this.Employees.Item(Index)
+End Property
+
+Public Property Get Employees() As Collection
+    Set Employees = this.Employees
+End Property
 
 Private Sub Class_Initialize()
     Set this.Employees = New Collection
 End Sub
 
-Public Sub Add(ByVal Item As Employee)
-    this.Employees.Add Item
-End Sub
-
-Public Function Item(ByVal Index As Variant) As Employee
-    Set Item = this.Employees.Item(Index)
-End Function
-
-Public Sub Remove(ByVal Index As Variant)
-    this.Employees.Remove Index
-End Sub
-
 Public Function Count() As Long
-    Count = this.Employees.Count()
+    Count = this.Employees.Count
 End Function
 
-'@Ignore UseMeaningfulName
-Public Sub Concat(ByVal EmployeeCollection2 As EmployeeCollection)
+Public Function GetItemsWithEmplID(ByVal EmplID As String) As Collection
     Dim Index As Long
-    For Index = 1 To EmployeeCollection2.Count
-        Add EmployeeCollection2.Item(Index)
-    Next Index
-End Sub
-
-Public Function Filter(Optional ByVal EmplIDFilter As Variant = Null _
-                       , Optional ByVal DeptIDFilter As Variant = Null _
-                        , Optional ByVal JobCodeFilter As Variant = Null _
-                         ) As EmployeeCollection
-    Dim FilteredCollection As EmployeeCollection
-    Dim Index As Long
-    Set FilteredCollection = New EmployeeCollection
-    
-    For Index = 1 To Count
-        If (IsNull(EmplIDFilter) Or (EmplIDFilter = Item(Index).EmplID)) _
-           And (IsNull(DeptIDFilter) Or (DeptIDFilter = Item(Index).DeptID)) _
-           And (IsNull(JobCodeFilter) Or (JobCodeFilter = Item(Index).JobCode)) Then
-            FilteredCollection.Add Item(Index)
-        End If
-    Next Index
-    
-    Set Filter = FilteredCollection
-End Function
-
-' Headers: Will include headers at (0,) if True, otherwise data will begin at (0,)
-' IncludeDeptID: Include DeptID field if True
-' IncludeJobCode: Include JobCode field if True
-Public Function ToArrayContainer(Optional ByVal Headers As Boolean = True _
-                                 , Optional ByVal IncludeDeptID As Boolean = True _
-                                  , Optional ByVal IncludeJobCode As Boolean = True _
-                                   ) As ArrayContainer
-        
-    ' Data Columns:
-    ' EmplID
-    ' Name
-    ' [DeptID]
-    ' [JobCode]
-    ' Hours
-    ' FTE
-        
-    Dim DataContainer As ArrayContainer
-    Dim DataArray() As Variant
-    Dim RowCount As Long                         ' (r,)
-    Dim ColumnCount As Long                      ' (,c)
-    Dim CollectionIndex As Long
-    Dim RowIndex As Long
-    Dim ColumnIndex As Long
+    Dim subCollection As Collection
     Dim Emp As Employee
     
-    Set DataContainer = New ArrayContainer
+    Set subCollection = New Collection
     
-    RowCount = Count()
-    If Headers Then RowCount = RowCount + 1
-    
-    ColumnCount = 4                              ' EmplID, Name, Hours, FTE
-    If IncludeDeptID Then ColumnCount = ColumnCount + 1
-    If IncludeJobCode Then ColumnCount = ColumnCount + 1
-    
-    ReDim DataArray(RowCount, ColumnCount)
-    
-    RowIndex = 0
-    If Headers Then
-        ColumnIndex = 0
-        DataArray(RowIndex, ColumnIndex) = "EmplID"
-        
-        ColumnIndex = ColumnIndex + 1
-        DataArray(RowIndex, ColumnIndex) = "Name"
-        
-        If IncludeDeptID Then
-            ColumnIndex = ColumnIndex + 1
-            DataArray(RowIndex, ColumnIndex) = "DeptID"
-        End If
-        
-        If IncludeJobCode Then
-            ColumnIndex = ColumnIndex + 1
-            DataArray(RowIndex, ColumnIndex) = "JobCode"
-        End If
-        
-        ColumnIndex = ColumnIndex + 1
-        DataArray(RowIndex, ColumnIndex) = "Hours"
-        
-        ColumnIndex = ColumnIndex + 1
-        DataArray(RowIndex, ColumnIndex) = "FTE%"
-    End If
-    
-    For CollectionIndex = 1 To Count
-        RowIndex = RowIndex + 1
-        ColumnIndex = 0
-        Set Emp = Item(CollectionIndex)
-        ' Crashes because sometimes Item(CollectionIndex) returns Nothing
-        ' Because at this point in the code, sometimes this.Employees has records with Nothing
-        DataArray(RowIndex, ColumnIndex) = Emp.EmplID
-        
-        ColumnIndex = ColumnIndex + 1
-        DataArray(RowIndex, ColumnIndex) = Emp.Name
-        
-        If IncludeDeptID Then
-            ColumnIndex = ColumnIndex + 1
-            DataArray(RowIndex, ColumnIndex) = Emp.DeptID
-        End If
-        
-        If IncludeJobCode Then
-            ColumnIndex = ColumnIndex + 1
-            DataArray(RowIndex, ColumnIndex) = Emp.JobCode
-        End If
-        
-        ColumnIndex = ColumnIndex + 1
-        DataArray(RowIndex, ColumnIndex) = Emp.HoursWorked()
-        
-        ColumnIndex = ColumnIndex + 1
-        DataArray(RowIndex, ColumnIndex) = Emp.fte()
-    Next CollectionIndex
-    
-    DataContainer.SetData RowCount, ColumnCount, DataArray
-    
-    Set ToArrayContainer = DataContainer
-End Function
-
-Public Function CountUniqueEmplIDs() As Long
-    Dim EmplIDCounts As Variant
-    Dim EmplID As String
-    Dim Index As Long
-    Dim UniqueEmplIDs As Long
-    Set EmplIDCounts = CreateObject("Scripting.Dictionary")
-    UniqueEmplIDs = 0
-    
-    For Index = 1 To Count
-        EmplID = Item(Index).EmplID
-        If Not EmplIDCounts.Exists(EmplID) Then
-            UniqueEmplIDs = UniqueEmplIDs + 1
-            EmplIDCounts.Add EmplID, 1
-        End If
+    For Index = 1 To Count()
+        Set Emp = Item(Index)
+        If Emp.EmplID = EmplID Then subCollection.Add Emp
     Next Index
     
-    CountUniqueEmplIDs = UniqueEmplIDs
+    Set GetItemsWithEmplID = subCollection
 End Function
 
-'@Description "Returns a dictionary with key=EmplID and val=count"
-Public Function UniqueEmplIDs() As Variant
-Attribute UniqueEmplIDs.VB_Description = "Returns a dictionary with key=EmplID and val=count"
-    Dim EmplIDs As Variant
-    Dim EmplID As String
+Public Function GetItemsWithDept(ByVal dept As String) As Collection
+    Dim Index As Long
+    Dim subCollection As Collection
+    Dim Emp As Employee
+
+    Set subCollection = New Collection
+
+    For Index = 1 To Count()
+        Set Emp = Item(Index)
+        If Emp.Department = dept Then subCollection.Add Emp
+    Next Index
+
+    Set GetItemsWithDept = subCollection
+End Function
+
+'@Description(Returns an EmployeeCollection including all Employee instances with the specified JobCode.)
+Public Function EmployeesWithJobCode(ByVal JobCode As String) As EmployeeCollection
+    If Main.DEBUG_ON Then Debug.Print "EmployeeCollection.EmployeesWithJobCode(" & JobCode & ")"
+    Dim EmployeesWithJobCode_Result As EmployeeCollection
+    Set EmployeesWithJobCode_Result = New EmployeeCollection
+    
+    Dim Index As Long
+    Dim Emp As Employee
+    Set Emp = Nothing
+    
+    For Index = 1 To this.Employees.Count
+        Set Emp = this.Employees.Item(Index)
+        
+        If Emp.JobCode = JobCode Then
+            EmployeesWithJobCode_Result.Add Emp
+        End If
+        Set Emp = Nothing
+    Next Index
+
+    Set EmployeesWithJobCode = EmployeesWithJobCode_Result
+End Function
+
+'@Description(Returns an EmployeeCollection including all Employee instances with the specified Department.)
+Public Function EmployeesWithDepartment(ByVal Department As String) As EmployeeCollection
+    If Main.DEBUG_ON Then Debug.Print "EmployeeCollection.EmployeesWithDepartment(" & Department & ")"
+    Dim EmployeesWithDepartment_Result As EmployeeCollection
+    Set EmployeesWithDepartment_Result = New EmployeeCollection
+    
+    Dim Index As Long
+    Dim Emp As Employee
+    Set Emp = Nothing
+    
+    For Index = 1 To this.Employees.Count
+        Set Emp = this.Employees.Item(Index)
+        
+        If Emp.Department = Department Then
+            EmployeesWithDepartment_Result.Add Emp
+        End If
+        Set Emp = Nothing
+        Index = Index + 1
+    Next Index
+
+    Set EmployeesWithDepartment = EmployeesWithDepartment_Result
+End Function
+
+Public Function MergeDuplicateEmployeesOnJobCode() As EmployeeCollection
+    Dim mergedColletion As EmployeeCollection
+    Set mergedColletion = New EmployeeCollection
+    Dim Emp As Employee
     Dim Index As Long
     
-    Set EmplIDs = CreateObject("Scripting.Dictionary")
-    
-    For Index = 1 To Count
-        EmplID = Item(Index).EmplID
-        If Not EmplIDs.Exists(EmplID) Then
-            EmplIDs.Add EmplID, 1
-        Else
-            EmplIDs(EmplID) = EmplIDs(EmplID) + 1
-        End If
+    For Index = 1 To this.Employees.Count
+        Set Emp = this.Employees.Item(Index).Copy()
+        Emp.Department = vbNullString
+
+        mergedColletion.Add Emp
     Next Index
     
-    Set UniqueEmplIDs = EmplIDs
+    Set MergeDuplicateEmployeesOnJobCode = mergedColletion
 End Function
 
-'@Description "Returns a dictionary with key=DeptID and val=count"
-Public Function UniqueDeptIDs() As Variant
-Attribute UniqueDeptIDs.VB_Description = "Returns a dictionary with key=DeptID and val=count"
-    Dim DeptIDs As Variant
-    Dim DeptID As String
+Public Function MergeDuplicateEmployeesOnDepartment() As EmployeeCollection
+    If Main.DEBUG_ON Then Debug.Print "START MergeDuplicateEmployeesOnDepartment()"
+
+    Dim EC As EmployeeCollection
+    Dim Emp As Employee
     Dim Index As Long
-    
-    Set DeptIDs = CreateObject("Scripting.Dictionary")
-    
-    For Index = 1 To Count
-        DeptID = Item(Index).DeptID
-        If Not DeptIDs.Exists(DeptID) Then
-            DeptIDs.Add DeptID, 1
-        Else
-            DeptIDs(DeptID) = DeptIDs(DeptID) + 1
+
+    Set EC = New EmployeeCollection
+
+    For Index = 1 To this.Employees.Count
+        Set Emp = this.Employees.Item(Index).Copy
+
+        If Emp.Name <> vbNullString Then
+            Emp.JobCode = vbNullString
+            EC.Add Emp
+            
+            If Main.DEBUG_ON Then Emp.Print_Employee
         End If
-    Next Index
+        
+        Set Emp = Nothing
+    Next
     
-    Set UniqueDeptIDs = DeptIDs
+    Set MergeDuplicateEmployeesOnDepartment = EC
+    If Main.DEBUG_ON Then Debug.Print "END MergeDuplicateEmployeesOnDepartment()"
 End Function
 
-'@Description "Returns a dictionary with key=EmplID and val=count"
-Public Function UniqueJobCodes() As Variant
-Attribute UniqueJobCodes.VB_Description = "Returns a dictionary with key=EmplID and val=count"
-    Dim JobCodes As Variant
-    Dim JobCode As String
-    Dim Index As Long
+Public Function PruneEmployeesToJobCodeList() As EmployeeCollection
+    Dim NewEmployeeCollection As EmployeeCollection
+    Set NewEmployeeCollection = New EmployeeCollection
+    Dim Emp As Employee
     
-    Set JobCodes = CreateObject("Scripting.Dictionary")
-    
-    For Index = 1 To Count
-        JobCode = Item(Index).JobCode
-        If Not JobCodes.Exists(JobCode) Then
-            JobCodes.Add JobCode, 1
-        Else
-            JobCodes(JobCode) = JobCodes(JobCode) + 1
+    For Each Emp In this.Employees
+        If Main.inJobCodeList(Emp.JobCode) Then
+            NewEmployeeCollection.Add Emp.Copy
         End If
-    Next Index
+    Next Emp
     
-    Set UniqueJobCodes = JobCodes
+    Set PruneEmployeesToJobCodeList = NewEmployeeCollection
 End Function
 
-Public Function MergeAllEmployeesOnEmplID() As EmployeeCollection
-    Dim MergedCollection As EmployeeCollection
-    Dim FilteredCollection As EmployeeCollection
-    Dim MergedEmployee As Employee
-    Dim Index As Long
-    Dim EmplIDs As Variant
-    Dim Key As Variant
+Public Function Combine(ByVal EmployeeCollectionToBeCombined As EmployeeCollection) As EmployeeCollection
+    Dim CombinedEmployees As EmployeeCollection
+    Set CombinedEmployees = New EmployeeCollection
     
-    Set MergedCollection = New EmployeeCollection
-    Set FilteredCollection = New EmployeeCollection
-    Set EmplIDs = UniqueEmplIDs()
+    Dim Emp As Employee
+    For Each Emp In this.Employees
+        CombinedEmployees.Add Emp
+    Next Emp
+    For Each Emp In EmployeeCollectionToBeCombined.Employees
+        CombinedEmployees.Add Emp
+    Next Emp
     
-    For Each Key In EmplIDs.Keys
-        Set FilteredCollection = Filter(EmplIDFilter:=Key)
-        Set MergedEmployee = FilteredCollection.Item(1)
-        For Index = 2 To FilteredCollection.Count
-            Set MergedEmployee = MergedEmployee.Merge( _
-                                 FilteredCollection.Item(Index), _
-                                 PreserveDeptID:=False, _
-                                 PreserveJobCode:=False)
-        Next Index
-        MergedCollection.Add MergedEmployee
-    Next Key
-
-    Set MergeAllEmployeesOnEmplID = MergedCollection
+    Set Combine = CombinedEmployees
 End Function
 
-Public Function MergeAllEmployees() As EmployeeCollection
-    Dim MergedCollection As EmployeeCollection
-    Dim FilteredCollection As EmployeeCollection
-    Dim MergedEmployee As Employee
-    Dim Index As Long
-    Dim EmplIDs As Variant
-    Dim DeptIDs As Variant
-    Dim JobCodes As Variant
-    Dim EmplIDKey As Variant
-    Dim DeptIDKey As Variant
-    Dim JobCodeKey As Variant
+Public Function Copy() As EmployeeCollection
+    Dim EmpsCopy As EmployeeCollection
+    Dim Emp As Employee
     
-    Set MergedCollection = New EmployeeCollection
-    Set FilteredCollection = New EmployeeCollection
-    Set EmplIDs = UniqueEmplIDs()
-    Set DeptIDs = UniqueDeptIDs()
-    Set JobCodes = UniqueJobCodes()
+    Set EmpsCopy = New EmployeeCollection
     
-    For Each EmplIDKey In EmplIDs.Keys
-        If EmplIDKey <> vbNullString Then
-            For Each DeptIDKey In DeptIDs.Keys
-                For Each JobCodeKey In JobCodes.Keys
-                    Set FilteredCollection = Filter( _
-                                             EmplIDFilter:=EmplIDKey, _
-                                             DeptIDFilter:=DeptIDKey, _
-                                             JobCodeFilter:=JobCodeKey)
-                    If FilteredCollection.Count > 0 Then
-                        Set MergedEmployee = FilteredCollection.Item(1)
-                    
-                        If FilteredCollection.Count > 1 Then
-                            For Index = 2 To FilteredCollection.Count
-                                Set MergedEmployee = MergedEmployee.Merge(FilteredCollection.Item(Index))
-                            Next Index
-                        End If
-                    
-                        If FilteredCollection.Count > 0 And _
-                           Not (MergedEmployee Is Nothing) Then MergedCollection.Add MergedEmployee
-                    End If
-                Next JobCodeKey
-            Next DeptIDKey
-        End If
-    Next EmplIDKey
-
-    Set MergeAllEmployees = MergedCollection
+    For Each Emp In this.Employees
+        EmpsCopy.Add Emp.Copy
+    Next Emp
+    
+    Set Copy = EmpsCopy
 End Function
 
-Public Function MergeAllEmployeesOnDeptID() As EmployeeCollection
-    Dim MergedCollection As EmployeeCollection
-    Dim FilteredCollection As EmployeeCollection
-    Dim MergedEmployee As Employee
-    Dim Index As Long
-    Dim EmplIDs As Variant
-    Dim DeptIDs As Variant
-    Dim EmplIDKey As Variant
-    Dim DeptIDKey As Variant
-    
-    Set MergedCollection = New EmployeeCollection
-    Set FilteredCollection = New EmployeeCollection
-    Set EmplIDs = UniqueEmplIDs()
-    Set DeptIDs = UniqueDeptIDs()
-    
-    For Each EmplIDKey In EmplIDs.Keys
-        For Each DeptIDKey In DeptIDs.Keys
-            Set FilteredCollection = Filter(EmplIDFilter:=EmplIDKey, DeptIDFilter:=DeptIDKey)
-            If FilteredCollection.Count > 0 Then Set MergedEmployee = FilteredCollection.Item(1)
-            If FilteredCollection.Count > 1 Then
-                For Index = 2 To FilteredCollection.Count
-                    Set MergedEmployee = MergedEmployee.Merge( _
-                                         FilteredCollection.Item(Index), _
-                                         PreserveJobCode:=False)
-                Next Index
-            End If
-
-            If FilteredCollection.Count > 0 And _
-               Not (MergedEmployee Is Nothing) Then MergedCollection.Add MergedEmployee
-        Next DeptIDKey
-    Next EmplIDKey
-    
-    Set MergeAllEmployeesOnDeptID = MergedCollection
-End Function
-
-Public Function MergeAllEmployeesOnJobCode() As EmployeeCollection
-    Dim MergedCollection As EmployeeCollection
-    Dim FilteredCollection As EmployeeCollection
-    Dim MergedEmployee As Employee
-    Dim Index As Long
-    Dim EmplIDs As Variant
-    Dim JobCodes As Variant
-    Dim EmplIDKey As Variant
-    Dim JobCodeKey As Variant
-    
-    Set MergedCollection = New EmployeeCollection
-    Set FilteredCollection = New EmployeeCollection
-    Set EmplIDs = UniqueEmplIDs()
-    Set JobCodes = UniqueJobCodes()
-    
-    For Each EmplIDKey In EmplIDs.Keys
-        For Each JobCodeKey In JobCodes.Keys
-            Set FilteredCollection = Filter(EmplIDFilter:=EmplIDKey, JobCodeFilter:=JobCodeKey)
-            If FilteredCollection.Count > 0 Then Set MergedEmployee = FilteredCollection.Item(1)
-            For Index = 2 To FilteredCollection.Count
-                Set MergedEmployee = MergedEmployee.Merge( _
-                                     FilteredCollection.Item(Index), _
-                                     PreserveDeptID:=False)
-            Next Index
-            If FilteredCollection.Count > 0 And _
-               Not (MergedEmployee Is Nothing) Then MergedCollection.Add MergedEmployee
-        Next JobCodeKey
-    Next EmplIDKey
-    
-    Set MergeAllEmployeesOnJobCode = MergedCollection
-End Function
-
-Public Function CreateEmployeeCollectionFromWorksheet( _
-       ByVal EmployeesWorksheet As Worksheet, _
-       ByVal IsHourly As Boolean, _
-       Optional ByVal HeaderRow As Long = 1 _
-       ) As EmployeeCollection
+Public Function CreateEmployeeCollectionFromWorksheet(ByVal ws As Worksheet, ByVal IsHourly As Boolean, Optional ByVal HeaderRow As Long = 1, Optional ByVal Source As String = vbNullString) As EmployeeCollection
     If IsHourly Then
-        Set CreateEmployeeCollectionFromWorksheet = _
-                                                  CreateEmployeeCollectionFromWorksheet_Hourly(EmployeesWorksheet, HeaderRow)
+        Set CreateEmployeeCollectionFromWorksheet = CreateEmployeeCollectionFromWorksheet_Hourly(ws, HeaderRow, Source)
     Else
-        Set CreateEmployeeCollectionFromWorksheet = _
-                                                  CreateEmployeeCollectionFromWorksheet_Appointed(EmployeesWorksheet, HeaderRow)
+        Set CreateEmployeeCollectionFromWorksheet = CreateEmployeeCollectionFromWorksheet_Appointed(ws, HeaderRow, Source)
     End If
 End Function
 
-Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
-        ByVal EmployeesWorksheet As Worksheet, _
-        ByVal HeaderRow As Long _
-        ) As EmployeeCollection
-    Dim Employees As EmployeeCollection
+Private Function CreateEmployeeCollectionFromWorksheet_Hourly(ByVal ws As Worksheet, ByVal HeaderRow As Long, ByVal Source As String) As EmployeeCollection
+    Dim EC As EmployeeCollection
     Dim Emp As Employee
+    
+    Set EC = New EmployeeCollection
+    ' Emp will be set in loop below
     
     Dim LastRow As Long
     Dim EmplIDCol As Long
     Dim NameCol As Long
-    Dim DeptIDCol As Long
+    Dim DeptCol As Long
     Dim JobCodeCol As Long
     Dim CanceledClassCol As Long
-    
-    Set Employees = New EmployeeCollection
     
     ' 01A, 01B, 02A, ..., 12A, 12B
     Dim PayPeriodCol(24) As Long
@@ -416,12 +281,12 @@ Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
     Dim Index As Long
     Dim Row As Long
     
-    LastRow = WBTools.FindLastRowInSheet(EmployeesWorksheet)
-    EmplIDCol = WBTools.FindColumnLikeName(EmployeesWorksheet, "*Empl*ID*")
-    NameCol = WBTools.FindColumnLikeName(EmployeesWorksheet, "Name*")
-    DeptIDCol = 4
-    JobCodeCol = WBTools.FindColumnLikeName(EmployeesWorksheet, "*Job Code*")
-    CanceledClassCol = WBTools.FindColumnByName(EmployeesWorksheet, "Canceled Class")
+    LastRow = WBTools.FindLastRowInSheet(ws)
+    EmplIDCol = WBTools.FindColumnLikeName(ws, "*Empl*ID*")
+    NameCol = WBTools.FindColumnLikeName(ws, "Name*")
+    DeptCol = WBTools.FindColumnLikeName(ws, "DEPT*")
+    JobCodeCol = WBTools.FindColumnLikeName(ws, "*Job Code*")
+    CanceledClassCol = WBTools.FindColumnByName(ws, "Canceled Class")
     
     For Index = 0 To 23
         If Index Mod 2 = 0 Then
@@ -430,20 +295,23 @@ Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
             PayPeriodString = Format$(WorksheetFunction.RoundUp((Index + 1) / 2, 0), "00") & "B"
         End If
         
-        PayPeriodCol(Index) = WBTools.FindColumnLikeName(EmployeesWorksheet, PayPeriodString & "*")
+        PayPeriodCol(Index) = WBTools.FindColumnLikeName(ws, PayPeriodString & "*")
     Next Index
     
     For Row = HeaderRow + 1 To LastRow
         Set Emp = New Employee
         
-        ' If there is an EmplID and the class is not canceled, then...
-        If WBTools.getCellValueAt(EmployeesWorksheet, EmplIDCol, Row) <> Empty _
-           And isEmpty(WBTools.getCellValueAt(EmployeesWorksheet, CanceledClassCol, Row)) Then
-            
-            Emp.EmplID = WBTools.getCellValueAt(EmployeesWorksheet, EmplIDCol, Row)
-            Emp.Name = WBTools.getCellValueAt(EmployeesWorksheet, NameCol, Row)
-            Emp.DeptID = WBTools.getCellValueAt(EmployeesWorksheet, DeptIDCol, Row)
-            Emp.JobCode = WBTools.getCellValueAt(EmployeesWorksheet, JobCodeCol, Row)
+        '@Ignore EmptyIfBlock
+        If WBTools.getCellValueAt(ws, EmplIDCol, Row) = Empty Then
+            ' No EmplID. Skip.
+        Else
+            Emp.EmplID = WBTools.getCellValueAt(ws, EmplIDCol, Row)
+            Emp.Name = WBTools.getCellValueAt(ws, NameCol, Row)
+            Emp.Department = WBTools.getCellValueAt(ws, DeptCol, Row)
+            Emp.IsCanceled = Not WBTools.getCellValueAt(ws, CanceledClassCol, Row) = Empty
+            Emp.IsHourly = True
+            Emp.JobCode = WBTools.getCellValueAt(ws, JobCodeCol, Row)
+            Emp.Source = Source
             
             For Index = 0 To 23
                 If Index Mod 2 = 0 Then
@@ -452,27 +320,21 @@ Private Function CreateEmployeeCollectionFromWorksheet_Hourly( _
                     PayPeriodString = Format$(WorksheetFunction.RoundUp((Index + 1) / 2, 0), "00") & "B"
                 End If
                 
-                If PayPeriodCol(Index) > -1 Then
-                    Emp.HoursWorked(PayPeriodString) = _
-                                                     WBTools.getCellValueAt(EmployeesWorksheet, PayPeriodCol(Index), Row)
-                End If
+                If PayPeriodCol(Index) > -1 Then Emp.hoursWorked(PayPeriodString) = WBTools.getCellValueAt(ws, PayPeriodCol(Index), Row)
             Next Index
             
-            If Not Emp Is Nothing Then Employees.Add Emp
+            If Not Emp Is Nothing Then EC.Add Emp
         End If
-    Next Row
+     Next Row
      
-    Set CreateEmployeeCollectionFromWorksheet_Hourly = Employees
+     Set CreateEmployeeCollectionFromWorksheet_Hourly = EC
 End Function
 
-Private Function CreateEmployeeCollectionFromWorksheet_Appointed( _
-        ByVal AppointedWorksheet As Worksheet, _
-        ByVal HeaderRow As Long _
-        ) As EmployeeCollection
-    Dim Employees As EmployeeCollection
+Private Function CreateEmployeeCollectionFromWorksheet_Appointed(ByVal ws As Worksheet, ByVal HeaderRow As Long, ByVal Source As String) As EmployeeCollection
+    Dim EC As EmployeeCollection
     Dim Emp As Employee
     
-    Set Employees = New EmployeeCollection
+    Set EC = New EmployeeCollection
     ' Emp will be set in loop below
 
     Dim LastRow As Long
@@ -485,37 +347,33 @@ Private Function CreateEmployeeCollectionFromWorksheet_Appointed( _
 
     Dim Row As Long
 
-    LastRow = WBTools.FindLastRowInSheet(AppointedWorksheet)
-    EmplIDCol = WBTools.FindColumnLikeName(AppointedWorksheet, "*Empl*ID*")
-    NameCol = WBTools.FindColumnLikeName(AppointedWorksheet, "Name*")
-    DeptCol = 6
-    JobCodeCol = WBTools.FindColumnLikeName(AppointedWorksheet, "*Job Code*")
-    CanceledClassCol = WBTools.FindColumnByName(AppointedWorksheet, "Canceled Class")
-    PayPeriodCol = WBTools.FindColumnByName(AppointedWorksheet, "Cntct hrs")
+    LastRow = WBTools.FindLastRowInSheet(ws)
+    EmplIDCol = WBTools.FindColumnLikeName(ws, "*Empl*ID*")
+    NameCol = WBTools.FindColumnLikeName(ws, "Name*")
+    DeptCol = WBTools.FindColumnLikeName(ws, "DEPT*")
+    JobCodeCol = WBTools.FindColumnLikeName(ws, "*Job Code*")
+    CanceledClassCol = WBTools.FindColumnByName(ws, "Canceled Class")
+    PayPeriodCol = WBTools.FindColumnByName(ws, "Cntct hrs")
     
     For Row = HeaderRow + 1 To LastRow
         Set Emp = New Employee
         
-        ' Not empty, not canceled, and a number value (ignore Independent Study)
-        If WBTools.getCellValueAt(AppointedWorksheet, EmplIDCol, Row) <> Empty _
-           And isEmpty(WBTools.getCellValueAt(AppointedWorksheet, CanceledClassCol, Row)) _
-           And ( _
-           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 2 Or _
-           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 3 Or _
-           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 4 Or _
-           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 5 Or _
-           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 14 Or _
-           VarType(WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)) = 20 _
-           ) Then
-            Emp.EmplID = WBTools.getCellValueAt(AppointedWorksheet, EmplIDCol, Row)
-            Emp.Name = WBTools.getCellValueAt(AppointedWorksheet, NameCol, Row)
-            Emp.DeptID = WBTools.getCellValueAt(AppointedWorksheet, DeptCol, Row)
-            Emp.JobCode = WBTools.getCellValueAt(AppointedWorksheet, JobCodeCol, Row)
-            Emp.HoursWorked("OTH") = WBTools.getCellValueAt(AppointedWorksheet, PayPeriodCol, Row)
+        '@Ignore EmptyIfBlock
+        If WBTools.getCellValueAt(ws, EmplIDCol, Row) = Empty Then
+            ' No EmplID. Skip.
+        Else
+            Emp.EmplID = WBTools.getCellValueAt(ws, EmplIDCol, Row)
+            Emp.Name = WBTools.getCellValueAt(ws, NameCol, Row)
+            Emp.Department = WBTools.getCellValueAt(ws, DeptCol, Row)
+            Emp.IsCanceled = Not WBTools.getCellValueAt(ws, CanceledClassCol, Row) = Empty
+            Emp.IsHourly = False
+            Emp.JobCode = WBTools.getCellValueAt(ws, JobCodeCol, Row)
+            Emp.Source = Source
+            Emp.hoursWorked("OTH") = WBTools.getCellValueAt(ws, PayPeriodCol, Row)
             
-            If Not Emp Is Nothing Then Employees.Add Emp
+            If Not Emp Is Nothing Then EC.Add Emp
         End If
-    Next Row
+     Next Row
      
-    Set CreateEmployeeCollectionFromWorksheet_Appointed = Employees
+     Set CreateEmployeeCollectionFromWorksheet_Appointed = EC
 End Function

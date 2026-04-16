@@ -1,0 +1,686 @@
+commit 222e743885bd69ab68a2f968a0d431018527574c
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 15:01:46 2025 -0700
+
+    Update eKey and relevant tests
+
+commit dfa9d211bdaebd7d8b7c3c3dadb6b423e0e999a1
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 14:54:18 2025 -0700
+
+    Fix accidental overwrite of data (resulting in only the last workbook being kept)
+
+commit ac73c9cd4ec3cbf8231558868198c07f8c6c8d9a
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 14:43:11 2025 -0700
+
+    Change Do While to For loops
+
+commit 7260b4b0e31e04bf2157833103ef6cf15505a4dd
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 14:17:29 2025 -0700
+
+    Replace calls to obsolete method
+
+commit 85495adeda8c3a97ab1f2b9a630336d33d0f9f3f
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 14:09:01 2025 -0700
+
+    Set SourceString to include both sources when merging Employee
+
+commit 3aa1134f9416b2cc9cb9cac9fd8c9a2838aa168c
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 13:47:01 2025 -0700
+
+    Set HasKey as obsolete (prepare to refactor and remove)
+
+commit 71a68f56e90d0473c7cd15ced52eb157243abc2d
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 13:46:13 2025 -0700
+
+    Change variant argument to Employee
+
+commit 9886078f1b752edd3999c4a99845273cd2037e0e
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 10:32:09 2025 -0700
+
+    Add new test files and fix broken test
+    
+    The test was previously failing due to the Hourly and Appointed employees having the same EmplID, name, Department, and Job Code (causing them to merge). A test for this case needs to be written, but wasn't the intended case for this particular test. New test workbooks with unique EmplIDs were created to prevent the employees being merged.
+
+commit 546c4d1a8101a9dbfc744aefa2eb7b3ddc6f2090
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 10:26:36 2025 -0700
+
+    Create new test workbook and add test
+
+commit 44c183b8abddde06201b2b7f06ed36471a641a04
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 10:20:27 2025 -0700
+
+    Create discrete variables to ensure failing test is not due to overwriting values
+
+commit aea6ddff057db4aef3ae85c3dffb9d38ae3f2fe4
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 10:01:15 2025 -0700
+
+    Create more EC tests
+
+commit 4d3955e97c6da28655ad39b4d5a077f4ff2fadac
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 09:10:15 2025 -0700
+
+    Add test method for EC.Combine
+
+commit 6b08e52f1952eef3bbd347db3f0c936c2438056e
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 08:27:45 2025 -0700
+
+    Fix incorrectly labeled sheet in test sheets
+
+commit 573c2a9b004905c48371e34ab10583ad37a4b9f8
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jul 10 08:10:02 2025 -0700
+
+    Add Rubberduck annotation to ignore IndexedUnboundDefaultMemberAccess in obsolete method
+
+commit b18db2f4ff1533399308060a33dfa849565076bc
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:34:30 2025 -0700
+
+    Remove unused variable
+
+commit c53bd75ac4d53dcf8632db9aaba340a828ff979d
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:33:32 2025 -0700
+
+    Add Rubberduck annotation to ignore unused variables that are intentionally not used
+
+commit f5d8ecbedb3bb0f55f620ae23d1549f60b8646ff
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:30:54 2025 -0700
+
+    Add Rubberduck annotation to ignore unused variables created by default with Rubberduck Unit Testing
+
+commit 1961204af2450c47944af81c03a20c83bdbed559
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:29:34 2025 -0700
+
+    Fix implicit call to the default sheet in Workbook
+
+commit 212edde456dece0bfac30c4b29392d97939c6393
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:26:32 2025 -0700
+
+    Add Rubberduck annotations to ignore empty methods created by default for Rubberduck Unit Tests
+
+commit 1b8d3776f5fde83d3229cb5d733ae46916351103
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:24:01 2025 -0700
+
+    Remove unnecessary assignment of New EmployeeCollection
+
+commit 0ee21c4a7c1aecde3f0c2a7c15028f97c9c66609
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:22:17 2025 -0700
+
+    Add Rubberduck annotation to ignore AssignmentNotUsed in test method
+
+commit ab7e81b725361db097bbdad831a61ce26de9f956
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:19:37 2025 -0700
+
+    Replace Integer declarations with Long declarations
+
+commit 95fe5746d302a758011cab78d3bc91278ba1939d
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:17:56 2025 -0700
+
+    Add Rubberduck annotation to ignore unused variable in a test function
+
+commit 92637acf54b06f26ae24886806c7ec8f680f4797
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:16:40 2025 -0700
+
+    Remove unused variable
+
+commit d64c9b464c80850f0ffcdd32ad659853565d0ef4
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:14:57 2025 -0700
+
+    Remove unused variable
+
+commit 098a2a1f9db6cd1a3e4d9054bd3fcd7eda8907c4
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:10:03 2025 -0700
+
+    Add Rubberduck annotation to ignore UseMeaningfulName in a test function
+
+commit 1f70b944d8482f015964c3a4a933cc86a90db9f3
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:08:10 2025 -0700
+
+    Add Rubberduck annotation to ignore empty If block in Code Inspection
+
+commit 764e73c3320c469755f76bd07df37e502b5f47bd
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:06:43 2025 -0700
+
+    Make BuildFTESummary... functions explicitly return type of Worksheet
+
+commit f166f8791db8e9b7a4efe0c640b9406466654165
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:05:01 2025 -0700
+
+    Replace Format with Format$ so that the return value is explicitly typed as String
+
+commit 378af5934419f1dbcec620d2de0693c275ebffa7
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:02:02 2025 -0700
+
+    Replace empty string with vbNullString
+
+commit 57128a7a79c859baf771a333e805587b21160de3
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 16:00:20 2025 -0700
+
+    Make return type of CreateEmployeeCollectionFromWorksheet explicit
+
+commit f8a6bcb48742b18f5a49e2547177b356ac3f2dae
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 9 15:58:08 2025 -0700
+
+    Make return value of Combine function explicit
+
+commit aacfbd6497e8226fc819b6dd1ef1668d98b2a80a
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jul 2 08:30:39 2025 -0700
+
+    Add test for BuildFTESummaryByJobCode for the 'OTH' Pay Period
+
+commit b3db468695d35f58bec913a3defb871a25de21d6
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 13:15:28 2025 -0700
+
+    Add Test Workbook for Appointed
+
+commit d0f0fd0886eae0f12c91435354fcc10edcb3a57b
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 12:58:18 2025 -0700
+
+    Library capitalization change (no actual change, done automatically)
+
+commit 9a4e11c7884e26a18de8623ba1e88e96bcdc0f69
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 11:51:31 2025 -0700
+
+    Create separate functions for Hourly and Appointed to fix issue
+
+commit 13284c5e2b259159f5621fd881c1e496d34c8c4d
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 11:32:05 2025 -0700
+
+    Replace code in Main with CreateEmployeeCollectionFromWorksheet calls
+
+commit 407f38cc1d131f686eb5ebe9d6b72e2132116144
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 11:18:20 2025 -0700
+
+    Update test with specific assertions
+
+commit 3f9205328e212972fbd21b0e24d49cd9e52f0ccd
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 10:58:17 2025 -0700
+
+    Fix test
+
+commit afacfb8e5bba72402800a7b1cf1ba749c5e8a260
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 10:55:50 2025 -0700
+
+    Add test for CreateEmployeeCollectionFromWorksheet for Hourly employees
+
+commit 8e7719dce197b7d96db8d523d73665cd901cfdb6
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 10:54:55 2025 -0700
+
+    Create function to create EC from Excel Worksheet
+
+commit d29a3377165eec2ec91a0511b9b24deb9f3af010
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 10:48:55 2025 -0700
+
+    Add IsCanceled property to Employee class
+
+commit 766157f8f4707bc129df5c632e09b11ac3a3a588
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 09:28:54 2025 -0700
+
+    Update libraries
+
+commit fa8a2a22a3decb6d66ba4bdf76f8692f11ad574b
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 09:18:05 2025 -0700
+
+    Update libraries
+
+commit 293996acffadd25e9675833726b1efbe7a880086
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jul 1 08:40:34 2025 -0700
+
+    Remove vestigial Debug.Print statements
+
+commit f28376e44f772331c2777b3d9bb6dfbbf3694fa6
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:59:37 2025 -0700
+
+    Fix broken test (VBA collections index starting at 1)
+
+commit 0c305e0a522730d07fd759abb6cd2c78370b1534
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:42:35 2025 -0700
+
+    Convert Do While to For loop and move Dim out of loop
+
+commit fc1f7c7f51a7fd6e0bda5627c864fd5d3dc437d8
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:40:17 2025 -0700
+
+    Convert Do While to For loop
+
+commit 74f66d342b8441fcac8b54fb253d037dad100f7e
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:39:00 2025 -0700
+
+    Convert Do While to For loop
+
+commit 18bb52ceafe1eb2cc47c30d70e49c9b40220a84e
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:36:08 2025 -0700
+
+    Remove unused function
+
+commit cd02524b285a1d2984ffb028c201ced6522c5907
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:18:32 2025 -0700
+
+    Move Dim out of loop
+
+commit b357af25ab8f253c0fb227c718f24d4b78841dd4
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:17:19 2025 -0700
+
+    Change Do While to For loop
+
+commit 91668bb6ad6c755a5c5211fb79380285434b6425
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:15:34 2025 -0700
+
+    Move Dim out of loop
+
+commit 86e8bb60abc66ddf5abc35916a0bdd8662575c87
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:14:02 2025 -0700
+
+    Change Do While to For loop
+
+commit 3f69b4a2b561fafb456c99f605ff209a0fc32930
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:10:50 2025 -0700
+
+    Refactor so that item is Item
+
+commit 2124285cecf36841228f8c0f97a828d1d1a235a0
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:03:02 2025 -0700
+
+    Add test for EC.Combine()
+
+commit b441d66c12982d629ac9b5f82e2a35fa068585e2
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 15:01:56 2025 -0700
+
+    Add test for inJobCodeList()
+
+commit 534d944a69b408140361de9803b1689142731969
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 10:03:04 2025 -0700
+
+    Set DEBUG_ON = False and remove comment block
+
+commit 179186512c12e0d9b43f5f2809c0c74a97cce62f
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 09:42:02 2025 -0700
+
+    Remove vestigial Debug.Print statements
+
+commit b788cb7c708833ed1d8b93085cc4bbf73e0af471
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 09:36:27 2025 -0700
+
+    Add test for BuildFTESummaryByDepartment using departments with spaces
+
+commit 9d2a69c1a79e1cadc4ed5cf748185c5b1b5efd3e
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Mon Jun 30 09:25:22 2025 -0700
+
+    Add tests for non-numeric department IDs
+
+commit edca38ffd06a0effbe42000fc61e2fe16f6d11b2
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 16:28:24 2025 -0700
+
+    Add Then to If clause...
+
+commit 9c2f996dde98a3cbe01fb6ecb1862029db8ac904
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 16:27:18 2025 -0700
+
+    Add check for Main.DEBUG_ON flag
+
+commit 9aed8cfb9c527a3d9bb8fc5ea03b050e7ce402d5
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 16:23:32 2025 -0700
+
+    Move code into loop
+
+commit 11b05d2c37b005bd5026ad74afc507f2d3dada00
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 16:18:29 2025 -0700
+
+    Prevent debug.print if DEBUG_ON flag is not True
+
+commit 5f523a356c5146339e8665a0705f098fdf7fe0a8
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 16:11:33 2025 -0700
+
+    Convert Do While to For Loop
+
+commit d779e59ed2c05ae7083f516201cee1bf73efb00f
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 16:06:47 2025 -0700
+
+    Move Dim Emp out of loop
+
+commit 13c0cd2edfc211540252c80c80d4eecb32fb0ade
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 15:59:42 2025 -0700
+
+    Change EmployeeCollection variable name from coll to EC
+
+commit cad7ba3b941536947a3e64aa719da4feb969e59c
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 15:58:10 2025 -0700
+
+    Add test for multiple departments
+
+commit 111a9bda518486d7e511d6d5ad2ab4b1d31aebcb
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 15:55:25 2025 -0700
+
+    Use copies instead of directly maniupulating data
+
+commit 767ead32115a0302a6b831d4263ea53d499bf4bd
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 15:33:03 2025 -0700
+
+    Add method for Deep Copy of EmployeeCollection
+
+commit 2fc5bea7cb0f1fb152db039823c9dab815374bb7
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 11:49:22 2025 -0700
+
+    Add tests for BuildFTESummaryByJobCode
+
+commit a297f3753db6104b369ef384e685f9f036ac32cf
+Merge: 5efc330 3fb399c
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 11:40:18 2025 -0700
+
+    Resolve merge conflict by removing conflicting code in main branch
+
+commit 3fb399c1d2b899876a6716ee1c59030f4e967d44
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 11:34:19 2025 -0700
+
+    Close Issue 1
+
+commit 661ae8b6fb80cb70ee3852efafd0411acb67055a
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 11:31:02 2025 -0700
+
+    Add Open and Closed headers for Issues.md
+
+commit 4dc0d48331e6bf5e85f7485a007722abff31b760
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 11:22:28 2025 -0700
+
+    Set sheets to separate varaibles for readability
+
+commit d96ab02a08654054f657bba97319ab12160866b0
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 11:18:44 2025 -0700
+
+    Disable warnings during deletion, then re-enable warnings
+
+commit f00ebd7bd1cef289f12df8bd0ff5ba2e30209460
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu Jun 26 11:14:01 2025 -0700
+
+    Fix data copying from sheet to sheet
+
+commit 6c0cfee3a8c019eb8ad2111f0a12235625334f1e
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jun 25 17:09:54 2025 -0700
+
+    Add missing value assignment
+
+commit 30b2e560af4a257526650c06f878247aaeca39d5
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jun 25 17:05:01 2025 -0700
+
+    Switch from touching Excel repeatedly in loop to once after loop
+
+commit 99fbf17896d67df11ed47d7cea897abdcc66b520
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jun 25 09:41:22 2025 -0700
+
+    Change BuildFTE... subs to functions and add tests
+    
+    Same as previous commit
+
+commit bd5828c1a1a54fc03a198736dea76687787ff9d8
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jun 25 09:28:16 2025 -0700
+
+    Change BuildFTECombined from Sub to Function and add tests
+    
+    BuildFTECombined now returns a Worksheet object instead of directly manipulating a hardcoded Worksheet.
+
+commit 0053f456899839f7c8564a57113c13d1422ef79e
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jun 18 09:11:34 2025 -0700
+
+    Set Debug.Print statements to run only if DEBUG_ON = True, and fix indentation
+
+commit fa6351b78c5d222dd1a9b58fe58d2a7b667f75ec
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jun 18 08:55:28 2025 -0700
+
+    Refactor EmployeeCollection variable names for consistency.
+
+commit 81770c6ae82e0bb40cd4b44a34da3a89cbe7eaa6
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jun 17 15:34:23 2025 -0700
+
+    Fix faulty tests
+
+commit 35405e35db49b325d586d58c49ecddbd77c142a0
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jun 17 15:33:43 2025 -0700
+
+    Fix Employee.Copy (Add line to copy IsHourly)
+
+commit 3a90ff5cbce295584a4a48fd1b556bba7a81a6c8
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jun 17 15:28:45 2025 -0700
+
+    Add a set of tests for Employee.Copy()
+
+commit c623f6947f1a6c826f38f2f0e32e3049307f2f11
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jun 17 10:06:04 2025 -0700
+
+    Add test for merging on JobCode
+
+commit aa3e68622a31790629867b48abc641cde2b42fd5
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue Jun 17 09:57:40 2025 -0700
+
+    Remove Assert.Succeed from test
+
+commit 380402a54028f7694824174d13c5cc6f894444cf
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Fri Jun 13 07:55:54 2025 -0700
+
+    Add test
+
+commit a183837cf2160261357a17ef353344be6c8a70f0
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jun 11 14:59:23 2025 -0700
+
+    Add issue to tracker (incorrect aggregation on Job Code)
+
+commit f8e6f4855a989212b0a06a82a18615423e9c1903
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jun 11 14:48:40 2025 -0700
+
+    Add Issue tracking document with a new issue.
+
+commit d07e708bfb770e6b6de2e75114b00361b4e30024
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Wed Jun 11 14:32:51 2025 -0700
+
+    Create Excel workbook with test data for Hourly
+    
+    Excel workbook includes one sheet ("Hourly") with 24 rows of data (plus one row of headers). Pay periods and "employees" are assigned 1:1 (01A is paired with Doe,JanA, etc).
+
+commit 2959f518a5c4afa97d8e9e4ba72d62a660f14c01
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Fri May 16 09:14:45 2025 -0700
+
+    Create separate EmployeeCollections for Hourly/Appointed, then Combine
+
+commit 5efc33067579d7d64eda555e182e5da5af145ff3
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Fri May 16 08:53:35 2025 -0700
+
+    Remove old Debug.Print statement clutter
+
+commit 781d57a205343a387205d15f895272ee28ae6dc6
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Fri May 16 08:47:39 2025 -0700
+
+    Add unit test for the new Combine method in EmployeeCollection
+
+commit 32261a8a02cc4b2876872fd23a9e1bf4d3b35b7c
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Fri May 16 08:47:02 2025 -0700
+
+    Add method to combine two EmployeeCollection objects
+
+commit ac12ae28fac82ec8167cf23a851a28162f0bb570
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 15:41:49 2025 -0700
+
+    Fix indentation in multiple files
+
+commit 1e215b6b2535b346c51145f79e3a50c198c37362
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 15:41:06 2025 -0700
+
+    Update libraries
+
+commit d9452e7c67e5039e1fbe655a124fc1d0749a4636
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 15:38:05 2025 -0700
+
+    Update indentation and comments in Main.bas
+
+commit a961b424811e741aeee196892c83348370ae92ad
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 15:34:06 2025 -0700
+
+    Fix whitespace in EmployeeCollection.cls
+
+commit 3eeda87ad967eb70c975d08586622261eab12bc3
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 15:32:50 2025 -0700
+
+    Fix indentation and comments in Employee.cls
+
+commit 69f84b419b2ff10d8f5ee2050276cdd545be7c23
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 15:28:42 2025 -0700
+
+    Add unit test for Employee.IsHourly (Let)
+
+commit e5f81498a7b7abccb1620682baf22c1bdf30c3ee
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 15:23:29 2025 -0700
+
+    Update unit test category annotation
+
+commit d0ee2afad49877f7d4fbe07526ca0f61f45ffcb6
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 15:22:36 2025 -0700
+
+    Add unit test for Employee.IsHourly (Get)
+
+commit 2568df535956c11e4449533d3667c59de00010f8
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 15:16:08 2025 -0700
+
+    Add IsHourly property to Employee class
+
+commit 7a090eb79917f2f66199dd1aff5dc1344bea5f16
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 15:12:39 2025 -0700
+
+    Add description annotation to Main.main, and a TODO
+
+commit 7e3830501622d19c5024a4349ed45102fca20eb7
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 12:04:35 2025 -0700
+
+    Update .gitignore
+
+commit 1a1ab0c6cd7b4540f7863fb25cc1115a4339ea3f
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 12:03:21 2025 -0700
+
+    Add unit tests
+
+commit ebcd59a7691238ee76b7023c6bcdd4ca7b9b4e95
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 12:02:55 2025 -0700
+
+    Add project code
+
+commit a3c32ad301c8300ab172882e26cc7963aa340427
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 11:47:33 2025 -0700
+
+    Add libraries
+
+commit 354053e19326a8e6ad2fa4f531277850d602e5b2
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Thu May 15 11:46:41 2025 -0700
+
+    Create .gitignore
+
+commit 77079a4796a4d7db1fd41ec186515d529b70fad6
+Author: Jessica Fairchild <jfairchild@columbiabasin.edu>
+Date:   Tue May 13 09:34:24 2025 -0700
+
+    Add Readme.md
